@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PediAid Status</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1e3a5f;
+    --navy-dark: #12253c;
+    --green: #16a34a;
+    --red: #dc2626;
+    --yellow: #f59e0b;
+    --gray: #64748b;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-soft: #475569;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: white;
+    padding: 24px 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo {
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.2px;
+  }
+  .subtitle {
+    font-size: 12px;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+  .clock {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 14px;
+    opacity: 0.9;
+    text-align: right;
+  }
+  .clock-small { font-size: 11px; opacity: 0.7; font-weight: 400; }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+  .refresh-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 10px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+  .refresh-bar strong { color: var(--text); font-weight: 700; }
+  .refresh-bar button {
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .refresh-bar button:hover { background: var(--navy-dark); }
+  h2 {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--gray);
+    margin: 26px 0 12px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .row:last-child { border-bottom: none; }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(148,163,184,0.15);
+  }
+  .dot.green { background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.2); }
+  .dot.red   { background: var(--red);   box-shadow: 0 0 0 3px rgba(220,38,38,0.2); }
+  .dot.yellow{ background: var(--yellow);box-shadow: 0 0 0 3px rgba(245,158,11,0.2); animation: pulse 1.4s ease-in-out infinite; }
+  .dot.gray  { background: var(--gray);  box-shadow: 0 0 0 3px rgba(100,116,139,0.2); }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%     { opacity: 0.4; }
+  }
+  .row-main { flex: 1; min-width: 0; }
+  .row-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .row-sub {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .row-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-soft);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .row-meta .ms { font-weight: 700; color: var(--text); font-size: 13px; }
+  .row a { color: #2563eb; text-decoration: none; }
+  .row a:hover { text-decoration: underline; }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .pill.green  { background: rgba(22,163,74,0.12);  color: var(--green); }
+  .pill.red    { background: rgba(220,38,38,0.12);  color: var(--red); }
+  .pill.yellow { background: rgba(245,158,11,0.15); color: #b45309; }
+  .pill.gray   { background: rgba(100,116,139,0.15);color: var(--gray); }
+  .checklist .row {
+    cursor: pointer;
+    user-select: none;
+  }
+  .checklist input[type=checkbox] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--green);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checklist .row-title.done {
+    text-decoration: line-through;
+    color: var(--gray);
+    font-weight: 500;
+  }
+  footer {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--gray);
+    font-size: 11px;
+  }
+  @media (max-width: 640px) {
+    header { padding: 18px 20px; }
+    h1 { font-size: 18px; }
+    .clock { font-size: 12px; }
+    main { padding: 18px 14px 48px; }
+    .row { padding: 12px 14px; gap: 10px; }
+    .row-title { font-size: 13px; }
+    .row-sub { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <div class="logo">🏥</div>
+      <div>
+        <h1>PediAid Status</h1>
+        <div class="subtitle">Live operational health for the PediAid platform</div>
+      </div>
+    </div>
+    <div class="clock">
+      <div id="clock">—</div>
+      <div class="clock-small">IST · Asia/Kolkata</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="refresh-bar">
+    <div>
+      Last updated <strong id="last-updated">just now</strong> ·
+      next check in <strong id="countdown">60</strong>s
+    </div>
+    <button id="refresh-btn" type="button">Refresh now</button>
+  </div>
+
+  <!-- ============================ LIVE CHECKS ============================ -->
+  <h2>Live Checks</h2>
+  <div class="card" id="live-checks">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- ============================ HOSTING ============================ -->
+  <h2>Hosting &amp; Deployment</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Render <span class="pill green">Live</span></div>
+        <div class="row-sub">Backend · auto-deploys from GitHub</div>
+      </div>
+      <div class="row-meta"><a href="https://dashboard.render.com" target="_blank" rel="noopener">dashboard</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">GitHub Pages — pediaid-frontend <span class="pill green">Live</span></div>
+        <div class="row-sub">React academics web app</div>
+      </div>
+      <div class="row-meta"><a href="https://mulgundsunil1918.github.io/pediaid-frontend/" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">GitHub Pages — pediaid-flutter <span class="pill green">Live</span></div>
+        <div class="row-sub">Flutter web build</div>
+      </div>
+      <div class="row-meta"><a href="https://mulgundsunil1918.github.io/pediaid-flutter/" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot gray"></span>
+      <div class="row-main">
+        <div class="row-title">Google Play Store <span class="pill gray">Pending</span></div>
+        <div class="row-sub">Android APK · not published yet</div>
+      </div>
+      <div class="row-meta">—</div>
+    </div>
+    <div class="row">
+      <span class="dot gray"></span>
+      <div class="row-main">
+        <div class="row-title">Apple App Store <span class="pill gray">Pending</span></div>
+        <div class="row-sub">iOS build · not published yet</div>
+      </div>
+      <div class="row-meta">—</div>
+    </div>
+  </div>
+
+  <!-- ============================ DATABASE ============================ -->
+  <h2>Database &amp; Storage</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Neon PostgreSQL <span class="pill green">Connected</span></div>
+        <div class="row-sub">Singapore · Free tier · 0.5 GB</div>
+      </div>
+      <div class="row-meta"><a href="https://console.neon.tech" target="_blank" rel="noopener">console</a></div>
+    </div>
+    <div class="row">
+      <span class="dot yellow"></span>
+      <div class="row-main">
+        <div class="row-title">Local Disk <span class="pill yellow">Dev mode</span></div>
+        <div class="row-sub">Dev-only file storage → AWS S3 planned for production</div>
+      </div>
+      <div class="row-meta">—</div>
+    </div>
+  </div>
+
+  <!-- ============================ BACKEND STACK ============================ -->
+  <h2>Backend Stack</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Node.js + Fastify <span class="pill green">Running</span></div>
+        <div class="row-sub">HTTP framework</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">TypeScript <span class="pill green">Active</span></div>
+        <div class="row-sub">Full type safety across routes and services</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot yellow"></span>
+      <div class="row-main">
+        <div class="row-title">JWT + bcrypt <span class="pill yellow">Testing mode ON</span></div>
+        <div class="row-sub">RS256 · 15 min access token · 7 day refresh</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Sharp <span class="pill green">Ready</span></div>
+        <div class="row-sub">Image resize + compress pipeline</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">bcrypt <span class="pill green">Active</span></div>
+        <div class="row-sub">Password hashing · cost factor 12</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ FRONTEND STACK ============================ -->
+  <h2>Frontend Stack</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">React 18 + TypeScript <span class="pill green">Active</span></div>
+        <div class="row-sub">Strict mode · functional components</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Tailwind CSS <span class="pill green">Active</span></div>
+        <div class="row-sub">Utility-first styling</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">React Query <span class="pill green">Active</span></div>
+        <div class="row-sub">Server state · background refetch</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">React Router v6 <span class="pill green">Active</span></div>
+        <div class="row-sub">Client-side routing</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Zustand <span class="pill green">Active</span></div>
+        <div class="row-sub">Client state store · auth + UI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ MOBILE ============================ -->
+  <h2>Mobile App</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Flutter <span class="pill green">Built</span></div>
+        <div class="row-sub">Android · iOS · Web · Windows</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ EMAIL ============================ -->
+  <h2>Email &amp; Notifications</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot yellow"></span>
+      <div class="row-main">
+        <div class="row-title">Gmail SMTP <span class="pill yellow">Setup pending</span></div>
+        <div class="row-sub">pediaid.app@gmail.com · EMAIL_MODE=console on Render</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot gray"></span>
+      <div class="row-main">
+        <div class="row-title">Resend <span class="pill gray">Future</span></div>
+        <div class="row-sub">3000/mo free · deferred to scale</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot yellow"></span>
+      <div class="row-main">
+        <div class="row-title">In-app notifications <span class="pill yellow">In progress</span></div>
+        <div class="row-sub">Bell icon · 60s polling · live on both Flutter + React</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ DEV TOOLS ============================ -->
+  <h2>Dev Tools</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Claude Code <span class="pill green">Active</span></div>
+        <div class="row-sub">Terminal · laptop only</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Claude.ai <span class="pill green">Active</span></div>
+        <div class="row-sub">Prompts · phone + laptop</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot gray"></span>
+      <div class="row-main">
+        <div class="row-title">GitHub Codespaces <span class="pill gray">Available</span></div>
+        <div class="row-sub">VS Code in browser</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Notion <span class="pill green">Connected</span></div>
+        <div class="row-sub">Progress + docs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ REPOS ============================ -->
+  <h2>GitHub Repos</h2>
+  <div class="card">
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">pediaid-flutter <span class="pill green">Public</span></div>
+        <div class="row-sub">Flutter clinical calculators + charts</div>
+      </div>
+      <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-flutter" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">pediaid-frontend <span class="pill green">Public</span></div>
+        <div class="row-sub">React academics web app</div>
+      </div>
+      <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-frontend" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot gray"></span>
+      <div class="row-main">
+        <div class="row-title">pediaid-backend <span class="pill gray">Private</span></div>
+        <div class="row-sub">Fastify API + Postgres</div>
+      </div>
+      <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-backend" target="_blank" rel="noopener">open</a></div>
+    </div>
+  </div>
+
+  <!-- ============================ CHECKLIST ============================ -->
+  <h2>Pending Checklist</h2>
+  <div class="card checklist" id="checklist">
+    <!-- populated by JS -->
+  </div>
+
+</main>
+
+<footer>
+  PediAid Status · auto-built from GitHub · pings run from your browser · no analytics
+</footer>
+
+<script>
+(function() {
+  // -----------------------------------------------------------------
+  // Live check configuration
+  // -----------------------------------------------------------------
+  var CHECKS = [
+    {
+      id: 'backend',
+      title: 'Backend API',
+      sub:   'https://pediaid-backend.onrender.com/api/academics/health',
+      url:   'https://pediaid-backend.onrender.com/api/academics/health',
+      mode:  'json'
+    },
+    {
+      id: 'frontend',
+      title: 'Frontend Web',
+      sub:   'https://mulgundsunil1918.github.io/pediaid-frontend/',
+      url:   'https://mulgundsunil1918.github.io/pediaid-frontend/',
+      mode:  'html'
+    },
+    {
+      id: 'flutter',
+      title: 'Flutter App',
+      sub:   'https://mulgundsunil1918.github.io/pediaid-flutter/',
+      url:   'https://mulgundsunil1918.github.io/pediaid-flutter/',
+      mode:  'html'
+    }
+  ];
+
+  // -----------------------------------------------------------------
+  // Pending checklist items (state persisted in localStorage)
+  // -----------------------------------------------------------------
+  var CHECKLIST = [
+    'Set up Gmail SMTP on Render env vars',
+    'Turn off TESTING_MODE before launch',
+    'Fix moderator review page (blank bug)',
+    'In-app notifications working end to end',
+    'Build Flutter APK',
+    'Publish to Google Play Store',
+    'Publish to Apple App Store',
+    'Switch storage to AWS S3',
+    'Switch email to Resend at scale',
+    'Custom domain (pediaid.app)',
+    'Add systems & topics via Admin Panel',
+    'Verify first author credentials'
+  ];
+
+  // -----------------------------------------------------------------
+  // Build live-check rows
+  // -----------------------------------------------------------------
+  var liveEl = document.getElementById('live-checks');
+  CHECKS.forEach(function(c) {
+    var row = document.createElement('div');
+    row.className = 'row';
+    row.id = 'check-' + c.id;
+    row.innerHTML =
+      '<span class="dot yellow" data-dot></span>' +
+      '<div class="row-main">' +
+        '<div class="row-title">' + c.title + '</div>' +
+        '<div class="row-sub">' + c.sub + '</div>' +
+      '</div>' +
+      '<div class="row-meta">' +
+        '<div class="ms" data-ms>—</div>' +
+        '<div data-time>checking…</div>' +
+      '</div>';
+    liveEl.appendChild(row);
+  });
+
+  // -----------------------------------------------------------------
+  // Build checklist rows
+  // -----------------------------------------------------------------
+  var checklistEl = document.getElementById('checklist');
+  var saved = {};
+  try {
+    saved = JSON.parse(localStorage.getItem('pediaid_status_checklist') || '{}');
+  } catch (e) { saved = {}; }
+  CHECKLIST.forEach(function(label, i) {
+    var key = 'item_' + i;
+    var checked = !!saved[key];
+    var row = document.createElement('label');
+    row.className = 'row';
+    row.htmlFor = 'cb_' + i;
+    row.innerHTML =
+      '<input type="checkbox" id="cb_' + i + '" data-key="' + key + '" ' +
+        (checked ? 'checked' : '') + '>' +
+      '<div class="row-main">' +
+        '<div class="row-title' + (checked ? ' done' : '') + '" data-title>' + label + '</div>' +
+      '</div>';
+    checklistEl.appendChild(row);
+  });
+  checklistEl.addEventListener('change', function(e) {
+    if (e.target.matches('input[type=checkbox]')) {
+      var key = e.target.getAttribute('data-key');
+      saved[key] = e.target.checked;
+      localStorage.setItem('pediaid_status_checklist', JSON.stringify(saved));
+      var title = e.target.closest('.row').querySelector('[data-title]');
+      title.classList.toggle('done', e.target.checked);
+    }
+  });
+
+  // -----------------------------------------------------------------
+  // Live check runner
+  // -----------------------------------------------------------------
+  function runCheck(c) {
+    var row = document.getElementById('check-' + c.id);
+    var dot = row.querySelector('[data-dot]');
+    var ms  = row.querySelector('[data-ms]');
+    var tm  = row.querySelector('[data-time]');
+    dot.className = 'dot yellow';
+    ms.textContent = '—';
+    tm.textContent = 'checking…';
+    var start = performance.now();
+    // We can't always read cross-origin responses, but 'no-cors' fetches still
+    // succeed when the server is up and fail when it's down, which is what we
+    // care about here. For the backend health endpoint, CORS is wide open, so
+    // 'cors' mode gives us real status codes and timings.
+    var mode = c.id === 'backend' ? 'cors' : 'no-cors';
+    fetch(c.url, { mode: mode, cache: 'no-store' })
+      .then(function(res) {
+        var dt = Math.round(performance.now() - start);
+        // In no-cors mode, res.status is 0 and type is 'opaque' even on
+        // success. Treat any non-throw as up.
+        var up = mode === 'cors' ? res.ok : true;
+        dot.className = 'dot ' + (up ? 'green' : 'red');
+        ms.textContent = dt + ' ms';
+        tm.textContent = new Date().toLocaleTimeString('en-IN', { hour12: false });
+      })
+      .catch(function() {
+        var dt = Math.round(performance.now() - start);
+        dot.className = 'dot red';
+        ms.textContent = dt + ' ms';
+        tm.textContent = 'down · ' + new Date().toLocaleTimeString('en-IN', { hour12: false });
+      });
+  }
+
+  function runAllChecks() {
+    CHECKS.forEach(runCheck);
+    document.getElementById('last-updated').textContent = 'just now';
+    lastRun = Date.now();
+  }
+
+  // -----------------------------------------------------------------
+  // Countdown + auto-refresh every 60s
+  // -----------------------------------------------------------------
+  var lastRun = Date.now();
+  var INTERVAL = 60;
+  var cdEl = document.getElementById('countdown');
+  var luEl = document.getElementById('last-updated');
+  setInterval(function() {
+    var elapsed = Math.floor((Date.now() - lastRun) / 1000);
+    var remaining = Math.max(0, INTERVAL - elapsed);
+    cdEl.textContent = remaining;
+    if (elapsed < 5)   luEl.textContent = 'just now';
+    else if (elapsed < 60) luEl.textContent = elapsed + 's ago';
+    else               luEl.textContent = Math.floor(elapsed/60) + 'm ' + (elapsed%60) + 's ago';
+    if (remaining === 0) runAllChecks();
+  }, 1000);
+
+  document.getElementById('refresh-btn').addEventListener('click', runAllChecks);
+
+  // -----------------------------------------------------------------
+  // IST clock
+  // -----------------------------------------------------------------
+  function updateClock() {
+    var now = new Date();
+    var txt = now.toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'short',
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    document.getElementById('clock').textContent = txt;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Kick off
+  runAllChecks();
+})();
+</script>
+</body>
+</html>
