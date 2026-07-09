@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PediAid Status</title>
+<title>PediAid Admin — Mission Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,324 +11,381 @@
   :root {
     --navy: #1e3a5f;
     --navy-dark: #12253c;
+    --accent: #3182ce;
     --green: #16a34a;
     --red: #dc2626;
     --yellow: #f59e0b;
     --gray: #64748b;
-    --bg: #f1f5f9;
+    --bg: #eef2f7;
     --card: #ffffff;
     --border: #e2e8f0;
     --text: #0f172a;
     --text-soft: #475569;
+    --shadow: 0 1px 2px rgba(15,23,42,0.04), 0 4px 16px rgba(15,23,42,0.06);
+    --shadow-lift: 0 2px 4px rgba(15,23,42,0.06), 0 10px 28px rgba(15,23,42,0.10);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
+    background:
+      radial-gradient(1200px 400px at 80% -50px, rgba(49,130,206,0.10), transparent 60%),
+      radial-gradient(900px 300px at 10% -80px, rgba(30,58,95,0.10), transparent 60%),
+      var(--bg);
     color: var(--text);
     line-height: 1.5;
     min-height: 100vh;
   }
-  header {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+
+  /* ============================== HERO ============================== */
+  .hero {
+    background:
+      radial-gradient(700px 260px at 85% -60px, rgba(96,165,250,0.35), transparent 65%),
+      radial-gradient(500px 220px at 15% 120%, rgba(49,130,206,0.35), transparent 60%),
+      linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
     color: white;
-    padding: 24px 28px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 34px 24px 84px;
   }
-  .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
   }
-  .header-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .brand { display: flex; align-items: center; gap: 14px; }
   .logo {
-    width: 38px;
-    height: 38px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 10px;
-    display: flex;
+    width: 46px; height: 46px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 23px;
+    backdrop-filter: blur(4px);
+  }
+  h1 { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.3px; }
+  .subtitle { font-size: 12.5px; opacity: 0.78; margin-top: 2px; }
+  .clock { text-align: right; font-variant-numeric: tabular-nums; }
+  .clock-time { font-weight: 700; font-size: 15px; }
+  .clock-small { font-size: 11px; opacity: 0.65; }
+
+  .overall {
+    margin-top: 26px;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    font-size: 20px;
-  }
-  h1 {
-    font-size: 22px;
-    font-weight: 800;
-    margin: 0;
-    letter-spacing: -0.2px;
-  }
-  .subtitle {
-    font-size: 12px;
-    opacity: 0.75;
-    margin-top: 2px;
-  }
-  .clock {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
+    gap: 10px;
+    padding: 10px 18px 10px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.20);
+    font-weight: 700;
     font-size: 14px;
-    opacity: 0.9;
-    text-align: right;
+    backdrop-filter: blur(4px);
   }
-  .clock-small { font-size: 11px; opacity: 0.7; font-weight: 400; }
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 28px 20px 64px;
+  .overall .big-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 4px rgba(245,158,11,0.25);
   }
-  .refresh-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 22px;
-    padding: 10px 14px;
+  .overall.ok .big-dot   { background: #4ade80; box-shadow: 0 0 0 4px rgba(74,222,128,0.25), 0 0 12px rgba(74,222,128,0.8); }
+  .overall.bad .big-dot  { background: #f87171; box-shadow: 0 0 0 4px rgba(248,113,113,0.25), 0 0 12px rgba(248,113,113,0.8); }
+
+  /* ============================ STAT TILES ============================ */
+  main { max-width: 1100px; margin: 0 auto; padding: 0 20px 64px; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: -48px;
+  }
+  .stat {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 12px;
-    color: var(--text-soft);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
   }
-  .refresh-bar strong { color: var(--text); font-weight: 700; }
-  .refresh-bar button {
-    background: var(--navy);
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .refresh-bar button:hover { background: var(--navy-dark); }
-  h2 {
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
+  .stat-label {
+    font-size: 10.5px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px;
     color: var(--gray);
-    margin: 26px 0 12px;
   }
+  .stat-value {
+    font-size: 26px; font-weight: 800; margin-top: 3px;
+    letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-sub { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
+  .stat-value .unit { font-size: 13px; font-weight: 700; color: var(--gray); }
+
+  /* ============================ SECTIONS ============================ */
+  h2 {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--gray);
+    margin: 34px 0 12px;
+  }
+  h2 .emoji { font-size: 15px; }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
+    box-shadow: var(--shadow);
   }
   .row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    display: flex; align-items: center; gap: 14px;
     padding: 14px 18px;
     border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
   }
+  .row:hover { background: #f8fafc; }
   .row:last-child { border-bottom: none; }
   .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
     box-shadow: 0 0 0 3px rgba(148,163,184,0.15);
   }
-  .dot.green { background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.2); }
-  .dot.red   { background: var(--red);   box-shadow: 0 0 0 3px rgba(220,38,38,0.2); }
-  .dot.yellow{ background: var(--yellow);box-shadow: 0 0 0 3px rgba(245,158,11,0.2); animation: pulse 1.4s ease-in-out infinite; }
-  .dot.gray  { background: var(--gray);  box-shadow: 0 0 0 3px rgba(100,116,139,0.2); }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50%     { opacity: 0.4; }
-  }
+  .dot.green { background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.18); }
+  .dot.red   { background: var(--red);   box-shadow: 0 0 0 3px rgba(220,38,38,0.18); }
+  .dot.yellow{ background: var(--yellow);box-shadow: 0 0 0 3px rgba(245,158,11,0.18); animation: pulse 1.4s ease-in-out infinite; }
+  .dot.gray  { background: var(--gray);  box-shadow: 0 0 0 3px rgba(100,116,139,0.18); }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .row-main { flex: 1; min-width: 0; }
-  .row-title {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--text);
-  }
+  .row-title { font-weight: 700; font-size: 14px; color: var(--text); }
   .row-sub {
-    font-size: 12px;
-    color: var(--text-soft);
-    margin-top: 2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 12px; color: var(--text-soft); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .row-meta {
-    text-align: right;
-    font-size: 11px;
-    color: var(--text-soft);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    text-align: right; font-size: 11px; color: var(--text-soft);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
   }
   .row-meta .ms { font-weight: 700; color: var(--text); font-size: 13px; }
-  .row a { color: #2563eb; text-decoration: none; }
+  .row a { color: #2563eb; text-decoration: none; font-weight: 600; }
   .row a:hover { text-decoration: underline; }
   .pill {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase; vertical-align: 1px;
   }
   .pill.green  { background: rgba(22,163,74,0.12);  color: var(--green); }
   .pill.red    { background: rgba(220,38,38,0.12);  color: var(--red); }
   .pill.yellow { background: rgba(245,158,11,0.15); color: #b45309; }
   .pill.gray   { background: rgba(100,116,139,0.15);color: var(--gray); }
-  .checklist .row {
-    cursor: pointer;
-    user-select: none;
+  .pill.blue   { background: rgba(49,130,206,0.13); color: #1d4ed8; }
+
+  .refresh-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    font-size: 12px; color: var(--text-soft);
+    box-shadow: var(--shadow);
   }
-  .checklist input[type=checkbox] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--green);
-    cursor: pointer;
-    flex-shrink: 0;
+  .refresh-bar strong { color: var(--text); font-weight: 700; }
+  .refresh-bar button {
+    background: var(--navy); color: white; border: none;
+    padding: 7px 16px; font-family: inherit; font-weight: 700; font-size: 12px;
+    border-radius: 9px; cursor: pointer;
   }
-  .checklist .row-title.done {
-    text-decoration: line-through;
-    color: var(--gray);
-    font-weight: 500;
+  .refresh-bar button:hover { background: var(--navy-dark); }
+
+  /* ====================== ARCHITECTURE DIAGRAM ====================== */
+  .arch { padding: 26px 20px 30px; }
+  .arch-tier {
+    display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
   }
-  footer {
+  .arch-box {
+    background: #f8fafc;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    min-width: 200px;
+    max-width: 300px;
+    flex: 1;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .arch-box:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+  .arch-box.hero-box {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    border-color: #bfdbfe;
+  }
+  .arch-box.core {
+    background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+    border-color: var(--navy);
+    color: white;
+  }
+  .arch-box.core .arch-desc { color: rgba(255,255,255,0.75); }
+  .arch-box.core .arch-name { color: white; }
+  .arch-icon { font-size: 20px; }
+  .arch-name { font-weight: 800; font-size: 13.5px; margin-top: 6px; color: var(--text); }
+  .arch-link { font-size: 11px; margin-top: 1px; }
+  .arch-link a { color: #2563eb; text-decoration: none; }
+  .arch-link a:hover { text-decoration: underline; }
+  .arch-box.core .arch-link a { color: #93c5fd; }
+  .arch-desc { font-size: 11.5px; color: var(--text-soft); margin-top: 5px; line-height: 1.45; }
+  .arch-arrow {
     text-align: center;
-    padding: 28px 16px;
-    color: var(--gray);
-    font-size: 11px;
-  }
-  /* ---- Send Notification panel ---- */
-  .notify-form { padding: 16px 18px; }
-  .notify-form label {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
     font-size: 12px;
+    color: var(--gray);
     font-weight: 700;
-    color: var(--text);
-    margin: 12px 0 5px;
+    padding: 10px 0;
+    letter-spacing: 0.3px;
+  }
+  .arch-arrow .down { font-size: 16px; display: block; line-height: 1; margin-bottom: 2px; color: #94a3b8; }
+
+  /* ====================== SEND NOTIFICATION ====================== */
+  .notify-form { padding: 18px 20px 20px; }
+  .notify-form label {
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-size: 12px; font-weight: 700; color: var(--text);
+    margin: 13px 0 5px;
   }
   .notify-form label:first-child { margin-top: 0; }
-  .notify-form .counter {
-    font-weight: 400;
-    font-size: 10.5px;
-    color: var(--gray);
-  }
+  .notify-form .counter { font-weight: 500; font-size: 10.5px; color: var(--gray); }
   .notify-form input,
   .notify-form textarea {
-    width: 100%;
-    font-family: inherit;
-    font-size: 13px;
-    color: var(--text);
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 9px 12px;
+    width: 100%; font-family: inherit; font-size: 13.5px; color: var(--text);
+    background: #f8fafc;
+    border: 1.5px solid var(--border);
+    border-radius: 11px;
+    padding: 10px 13px;
     outline: none;
+    transition: border-color 0.15s, background 0.15s;
   }
   .notify-form input:focus,
-  .notify-form textarea:focus { border-color: var(--navy); }
-  .notify-form textarea { resize: vertical; min-height: 70px; }
+  .notify-form textarea:focus { border-color: var(--accent); background: white; }
+  .notify-form textarea { resize: vertical; min-height: 72px; }
   .notify-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 14px;
-    flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; margin-top: 16px; flex-wrap: wrap;
   }
   .notify-status { font-size: 12px; flex: 1; min-width: 0; }
   .notify-status.ok  { color: var(--green); font-weight: 700; }
   .notify-status.err { color: var(--red); font-weight: 600; }
   #nt-send {
-    background: var(--navy);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-family: inherit;
-    font-weight: 700;
-    font-size: 13px;
-    border-radius: 10px;
-    cursor: pointer;
+    background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+    color: white; border: none;
+    padding: 11px 22px;
+    font-family: inherit; font-weight: 800; font-size: 13px;
+    border-radius: 11px; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(30,58,95,0.35);
+    transition: transform 0.1s, box-shadow 0.15s;
   }
-  #nt-send:hover { background: var(--navy-dark); }
-  #nt-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  #nt-send:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(30,58,95,0.45); }
+  #nt-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .notify-preview {
-    margin-top: 14px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
+    margin-top: 15px;
+    background: #f8fafc;
+    border: 1.5px solid var(--border);
+    border-radius: 13px;
+    padding: 13px;
+    display: flex; gap: 11px; align-items: flex-start;
   }
   .notify-preview .app-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
-    background: var(--navy);
-    color: white;
-    font-size: 10px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--accent));
+    color: white; font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  .notify-preview .pv-title { font-size: 13px; font-weight: 800; color: var(--text); }
-  .notify-preview .pv-body  { font-size: 12px; color: var(--text-soft); margin-top: 2px; white-space: pre-wrap; }
+  .notify-preview .pv-title { font-size: 13.5px; font-weight: 800; color: var(--text); }
+  .notify-preview .pv-body  { font-size: 12.5px; color: var(--text-soft); margin-top: 2px; white-space: pre-wrap; }
+
+  /* ====================== CHECKLIST ====================== */
+  .checklist .row { cursor: pointer; user-select: none; }
+  .checklist input[type=checkbox] {
+    width: 18px; height: 18px;
+    accent-color: var(--green);
+    cursor: pointer; flex-shrink: 0;
+  }
+  .checklist .row-title.done { text-decoration: line-through; color: var(--gray); font-weight: 500; }
+
+  footer { text-align: center; padding: 30px 16px; color: var(--gray); font-size: 11px; }
+
+  /* ====================== RESPONSIVE ====================== */
+  @media (max-width: 860px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 640px) {
-    header { padding: 18px 20px; }
-    h1 { font-size: 18px; }
-    .clock { font-size: 12px; }
-    main { padding: 18px 14px 48px; }
+    .hero { padding: 24px 18px 76px; }
+    h1 { font-size: 19px; }
+    .logo { width: 40px; height: 40px; font-size: 20px; border-radius: 12px; }
+    .clock-time { font-size: 13px; }
+    main { padding: 0 14px 48px; }
+    .stats { gap: 10px; }
+    .stat { padding: 13px 14px; border-radius: 14px; }
+    .stat-value { font-size: 21px; }
     .row { padding: 12px 14px; gap: 10px; }
     .row-title { font-size: 13px; }
     .row-sub { font-size: 11px; }
+    .arch { padding: 18px 12px 22px; }
+    .arch-box { min-width: 0; max-width: none; flex: 1 1 100%; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="header-title">
-      <div class="logo">🏥</div>
-      <div>
-        <h1>PediAid Status</h1>
-        <div class="subtitle">Live operational health for the PediAid platform</div>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="logo">🏥</div>
+        <div>
+          <h1>PediAid Admin</h1>
+          <div class="subtitle">Mission control · live health · broadcast center</div>
+        </div>
+      </div>
+      <div class="clock">
+        <div class="clock-time" id="clock">—</div>
+        <div class="clock-small">IST · Asia/Kolkata</div>
       </div>
     </div>
-    <div class="clock">
-      <div id="clock">—</div>
-      <div class="clock-small">IST · Asia/Kolkata</div>
+    <div class="overall" id="overall">
+      <span class="big-dot"></span>
+      <span id="overall-text">Checking all systems…</span>
     </div>
   </div>
 </header>
 
 <main>
 
-  <div class="refresh-bar">
-    <div>
-      Last updated <strong id="last-updated">just now</strong> ·
-      next check in <strong id="countdown">60</strong>s
+  <!-- ============================ STAT TILES ============================ -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Services online</div>
+      <div class="stat-value" id="stat-online">—</div>
+      <div class="stat-sub">of <span id="stat-total">4</span> live checks</div>
     </div>
-    <button id="refresh-btn" type="button">Refresh now</button>
+    <div class="stat">
+      <div class="stat-label">Fastest response</div>
+      <div class="stat-value" id="stat-fast">— <span class="unit">ms</span></div>
+      <div class="stat-sub" id="stat-fast-name">&nbsp;</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Slowest response</div>
+      <div class="stat-value" id="stat-slow">— <span class="unit">ms</span></div>
+      <div class="stat-sub" id="stat-slow-name">&nbsp;</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Next auto-check</div>
+      <div class="stat-value"><span id="countdown">60</span> <span class="unit">s</span></div>
+      <div class="stat-sub">updated <span id="last-updated">just now</span></div>
+    </div>
+  </div>
+
+  <div class="refresh-bar">
+    <div>Pings run from <strong>your browser</strong> every 60 seconds — no server, no analytics.</div>
+    <button id="refresh-btn" type="button">Check now</button>
   </div>
 
   <!-- ============================ SEND NOTIFICATION ============================ -->
-  <h2>Send Push Notification</h2>
+  <h2><span class="emoji">📣</span> Send Push Notification</h2>
   <div class="card">
     <div class="notify-form">
       <label for="nt-title">Title <span class="counter" id="nt-title-count">0/65</span></label>
@@ -356,267 +413,224 @@
   </div>
 
   <!-- ============================ LIVE CHECKS ============================ -->
-  <h2>Live Checks</h2>
+  <h2><span class="emoji">🩺</span> Live Health Checks</h2>
   <div class="card" id="live-checks">
     <!-- populated by JS -->
   </div>
 
+  <!-- ============================ ARCHITECTURE ============================ -->
+  <h2><span class="emoji">🗺️</span> How PediAid Fits Together</h2>
+  <div class="card arch">
+
+    <div class="arch-tier">
+      <div class="arch-box hero-box" style="max-width:520px; text-align:center;">
+        <div class="arch-icon">👩‍⚕️</div>
+        <div class="arch-name">Pediatricians &amp; users</div>
+        <div class="arch-desc">Doctors open PediAid on their phone, the web, or through the app stores.</div>
+      </div>
+    </div>
+
+    <div class="arch-arrow"><span class="down">▼</span>they use one of these front doors</div>
+
+    <div class="arch-tier">
+      <div class="arch-box">
+        <div class="arch-icon">📱</div>
+        <div class="arch-name">PediAid App</div>
+        <div class="arch-link"><a href="https://pediaid.bridgr.co.in" target="_blank" rel="noopener">pediaid.bridgr.co.in</a></div>
+        <div class="arch-desc">The main app — calculators, growth charts, drug formulary, guides. Same code runs on Web, Android &amp; iOS (Flutter).</div>
+      </div>
+      <div class="arch-box">
+        <div class="arch-icon">🎓</div>
+        <div class="arch-name">PediAid Academics</div>
+        <div class="arch-link"><a href="https://academics.pediaid.bridgr.co.in" target="_blank" rel="noopener">academics.pediaid.bridgr.co.in</a></div>
+        <div class="arch-desc">Guides, chapters, CME events &amp; trial summaries. Opens inside the app too (the Academics tab).</div>
+      </div>
+      <div class="arch-box">
+        <div class="arch-icon">📄</div>
+        <div class="arch-name">Landing Page</div>
+        <div class="arch-link"><a href="https://info.pediaid.bridgr.co.in" target="_blank" rel="noopener">info.pediaid.bridgr.co.in</a></div>
+        <div class="arch-desc">Public marketing page &amp; privacy policy — what new users see first.</div>
+      </div>
+    </div>
+
+    <div class="arch-arrow"><span class="down">▼</span>all of them talk to one brain</div>
+
+    <div class="arch-tier">
+      <div class="arch-box core" style="max-width:520px;">
+        <div class="arch-icon">⚙️</div>
+        <div class="arch-name">Backend API — Render</div>
+        <div class="arch-link"><a href="https://pediaid-backend.onrender.com/api/academics/health" target="_blank" rel="noopener">pediaid-backend.onrender.com</a></div>
+        <div class="arch-desc">Handles logins, guides &amp; chapters, the visitor counter, "report an issue" emails, and your push-notification broadcasts. Auto-deploys whenever code is pushed to GitHub.</div>
+      </div>
+    </div>
+
+    <div class="arch-arrow"><span class="down">▼</span>which stores &amp; sends through</div>
+
+    <div class="arch-tier">
+      <div class="arch-box">
+        <div class="arch-icon">🗄️</div>
+        <div class="arch-name">Neon PostgreSQL</div>
+        <div class="arch-desc">The database — users, guides, CME records, visit counts. Singapore region, free tier.</div>
+      </div>
+      <div class="arch-box">
+        <div class="arch-icon">🔔</div>
+        <div class="arch-name">Firebase Cloud Messaging</div>
+        <div class="arch-desc">Google's push-notification service. The panel above sends through it to every subscribed device.</div>
+      </div>
+      <div class="arch-box">
+        <div class="arch-icon">✉️</div>
+        <div class="arch-name">Gmail SMTP</div>
+        <div class="arch-desc">Sends emails — password resets, and every "report an issue" tap lands in your inbox.</div>
+      </div>
+    </div>
+
+  </div>
+
   <!-- ============================ HOSTING ============================ -->
-  <h2>Hosting &amp; Deployment</h2>
+  <h2><span class="emoji">🚀</span> Hosting &amp; App Stores</h2>
   <div class="card">
     <div class="row">
       <span class="dot green"></span>
       <div class="row-main">
-        <div class="row-title">Render <span class="pill green">Live</span></div>
-        <div class="row-sub">Backend · auto-deploys from GitHub</div>
+        <div class="row-title">PediAid App (web) <span class="pill green">Live</span></div>
+        <div class="row-sub">Flutter web build · GitHub Pages · manual deploy from laptop</div>
+      </div>
+      <div class="row-meta"><a href="https://pediaid.bridgr.co.in" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">PediAid Academics <span class="pill green">Live</span></div>
+        <div class="row-sub">React site · GitHub Pages · auto-deploys on every push</div>
+      </div>
+      <div class="row-meta"><a href="https://academics.pediaid.bridgr.co.in" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Landing Page <span class="pill green">Live</span></div>
+        <div class="row-sub">Static site · GitHub Pages · privacy policy for app stores</div>
+      </div>
+      <div class="row-meta"><a href="https://info.pediaid.bridgr.co.in" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">Backend API — Render <span class="pill green">Live</span></div>
+        <div class="row-sub">Fastify + TypeScript · free tier (sleeps when idle, wakes in ~30s)</div>
       </div>
       <div class="row-meta"><a href="https://dashboard.render.com" target="_blank" rel="noopener">dashboard</a></div>
     </div>
     <div class="row">
-      <span class="dot green"></span>
+      <span class="dot yellow"></span>
       <div class="row-main">
-        <div class="row-title">GitHub Pages — pediaid-frontend <span class="pill green">Live</span></div>
-        <div class="row-sub">React academics web app</div>
+        <div class="row-title">Google Play Store <span class="pill yellow">In progress</span></div>
+        <div class="row-sub">Android app · upload-key reset in progress</div>
       </div>
-      <div class="row-meta"><a href="https://mulgundsunil1918.github.io/pediaid-frontend/" target="_blank" rel="noopener">open</a></div>
+      <div class="row-meta"><a href="https://play.google.com/console" target="_blank" rel="noopener">console</a></div>
     </div>
     <div class="row">
-      <span class="dot green"></span>
+      <span class="dot yellow"></span>
       <div class="row-main">
-        <div class="row-title">GitHub Pages — pediaid-flutter <span class="pill green">Live</span></div>
-        <div class="row-sub">Flutter web build</div>
+        <div class="row-title">Apple App Store <span class="pill yellow">In progress</span></div>
+        <div class="row-sub">iOS build on TestFlight · awaiting org account (D-U-N-S) + review submission</div>
       </div>
-      <div class="row-meta"><a href="https://mulgundsunil1918.github.io/pediaid-flutter/" target="_blank" rel="noopener">open</a></div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">GitHub Pages — pediaid-landing <span class="pill green">Live</span></div>
-        <div class="row-sub">Marketing landing page · privacy policy</div>
-      </div>
-      <div class="row-meta"><a href="https://mulgundsunil1918.github.io/pediaid-landing/" target="_blank" rel="noopener">open</a></div>
-    </div>
-    <div class="row">
-      <span class="dot gray"></span>
-      <div class="row-main">
-        <div class="row-title">Google Play Store <span class="pill gray">Pending</span></div>
-        <div class="row-sub">Android APK · not published yet</div>
-      </div>
-      <div class="row-meta">—</div>
-    </div>
-    <div class="row">
-      <span class="dot gray"></span>
-      <div class="row-main">
-        <div class="row-title">Apple App Store <span class="pill gray">Pending</span></div>
-        <div class="row-sub">iOS build · not published yet</div>
-      </div>
-      <div class="row-meta">—</div>
+      <div class="row-meta"><a href="https://appstoreconnect.apple.com" target="_blank" rel="noopener">console</a></div>
     </div>
   </div>
 
-  <!-- ============================ DATABASE ============================ -->
-  <h2>Database &amp; Storage</h2>
+  <!-- ============================ SERVICES ============================ -->
+  <h2><span class="emoji">🧩</span> Connected Services</h2>
   <div class="card">
     <div class="row">
       <span class="dot green"></span>
       <div class="row-main">
         <div class="row-title">Neon PostgreSQL <span class="pill green">Connected</span></div>
-        <div class="row-sub">Singapore · Free tier · 0.5 GB</div>
+        <div class="row-sub">Database · Singapore · free tier · 0.5 GB</div>
       </div>
       <div class="row-meta"><a href="https://console.neon.tech" target="_blank" rel="noopener">console</a></div>
     </div>
     <div class="row">
       <span class="dot yellow"></span>
       <div class="row-main">
-        <div class="row-title">Local Disk <span class="pill yellow">Dev mode</span></div>
-        <div class="row-sub">Dev-only file storage → AWS S3 planned for production</div>
+        <div class="row-title">Firebase Push (pediaid-app) <span class="pill yellow">Needs Render keys</span></div>
+        <div class="row-sub">Set FIREBASE_SERVICE_ACCOUNT_JSON + ADMIN_BROADCAST_KEY on Render to activate</div>
+      </div>
+      <div class="row-meta"><a href="https://console.firebase.google.com/project/pediaid-app" target="_blank" rel="noopener">console</a></div>
+    </div>
+    <div class="row">
+      <span class="dot yellow"></span>
+      <div class="row-main">
+        <div class="row-title">Gmail SMTP <span class="pill yellow">Setup pending</span></div>
+        <div class="row-sub">pediaid.app@gmail.com · EMAIL_MODE=console on Render (emails print to logs only)</div>
+      </div>
+      <div class="row-meta">—</div>
+    </div>
+    <div class="row">
+      <span class="dot yellow"></span>
+      <div class="row-main">
+        <div class="row-title">Auth (JWT) <span class="pill yellow">Testing mode ON</span></div>
+        <div class="row-sub">RS256 · remember to turn TESTING_MODE off before launch</div>
+      </div>
+      <div class="row-meta">—</div>
+    </div>
+    <div class="row">
+      <span class="dot gray"></span>
+      <div class="row-main">
+        <div class="row-title">AWS S3 storage <span class="pill gray">Future</span></div>
+        <div class="row-sub">File uploads use local disk for now → S3 planned for production scale</div>
       </div>
       <div class="row-meta">—</div>
     </div>
   </div>
 
-  <!-- ============================ BACKEND STACK ============================ -->
-  <h2>Backend Stack</h2>
-  <div class="card">
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Node.js + Fastify <span class="pill green">Running</span></div>
-        <div class="row-sub">HTTP framework</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">TypeScript <span class="pill green">Active</span></div>
-        <div class="row-sub">Full type safety across routes and services</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot yellow"></span>
-      <div class="row-main">
-        <div class="row-title">JWT + bcrypt <span class="pill yellow">Testing mode ON</span></div>
-        <div class="row-sub">RS256 · 15 min access token · 7 day refresh</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Sharp <span class="pill green">Ready</span></div>
-        <div class="row-sub">Image resize + compress pipeline</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">bcrypt <span class="pill green">Active</span></div>
-        <div class="row-sub">Password hashing · cost factor 12</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================ FRONTEND STACK ============================ -->
-  <h2>Frontend Stack</h2>
-  <div class="card">
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">React 18 + TypeScript <span class="pill green">Active</span></div>
-        <div class="row-sub">Strict mode · functional components</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Tailwind CSS <span class="pill green">Active</span></div>
-        <div class="row-sub">Utility-first styling</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">React Query <span class="pill green">Active</span></div>
-        <div class="row-sub">Server state · background refetch</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">React Router v6 <span class="pill green">Active</span></div>
-        <div class="row-sub">Client-side routing</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Zustand <span class="pill green">Active</span></div>
-        <div class="row-sub">Client state store · auth + UI</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================ MOBILE ============================ -->
-  <h2>Mobile App</h2>
-  <div class="card">
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Flutter <span class="pill green">Built</span></div>
-        <div class="row-sub">Android · iOS · Web · Windows</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================ EMAIL ============================ -->
-  <h2>Email &amp; Notifications</h2>
-  <div class="card">
-    <div class="row">
-      <span class="dot yellow"></span>
-      <div class="row-main">
-        <div class="row-title">Gmail SMTP <span class="pill yellow">Setup pending</span></div>
-        <div class="row-sub">pediaid.app@gmail.com · EMAIL_MODE=console on Render</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot gray"></span>
-      <div class="row-main">
-        <div class="row-title">Resend <span class="pill gray">Future</span></div>
-        <div class="row-sub">3000/mo free · deferred to scale</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot yellow"></span>
-      <div class="row-main">
-        <div class="row-title">In-app notifications <span class="pill yellow">In progress</span></div>
-        <div class="row-sub">Bell icon · 60s polling · live on both Flutter + React</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================ DEV TOOLS ============================ -->
-  <h2>Dev Tools</h2>
-  <div class="card">
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Claude Code <span class="pill green">Active</span></div>
-        <div class="row-sub">Terminal · laptop only</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Claude.ai <span class="pill green">Active</span></div>
-        <div class="row-sub">Prompts · phone + laptop</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot gray"></span>
-      <div class="row-main">
-        <div class="row-title">GitHub Codespaces <span class="pill gray">Available</span></div>
-        <div class="row-sub">VS Code in browser</div>
-      </div>
-    </div>
-    <div class="row">
-      <span class="dot green"></span>
-      <div class="row-main">
-        <div class="row-title">Notion <span class="pill green">Connected</span></div>
-        <div class="row-sub">Progress + docs</div>
-      </div>
-    </div>
-  </div>
-
   <!-- ============================ REPOS ============================ -->
-  <h2>GitHub Repos</h2>
+  <h2><span class="emoji">🐙</span> GitHub Repos</h2>
   <div class="card">
     <div class="row">
       <span class="dot green"></span>
       <div class="row-main">
-        <div class="row-title">pediaid-flutter <span class="pill green">Public</span></div>
-        <div class="row-sub">Flutter clinical calculators + charts</div>
+        <div class="row-title">pediaid-flutter</div>
+        <div class="row-sub">The app — calculators, charts, formulary · deploys the web app + app-store builds</div>
       </div>
       <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-flutter" target="_blank" rel="noopener">open</a></div>
     </div>
     <div class="row">
       <span class="dot green"></span>
       <div class="row-main">
-        <div class="row-title">pediaid-frontend <span class="pill green">Public</span></div>
-        <div class="row-sub">React academics web app</div>
+        <div class="row-title">pediaid-frontend</div>
+        <div class="row-sub">Academics website · auto-deploys on push</div>
       </div>
       <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-frontend" target="_blank" rel="noopener">open</a></div>
     </div>
     <div class="row">
-      <span class="dot gray"></span>
+      <span class="dot green"></span>
       <div class="row-main">
-        <div class="row-title">pediaid-backend <span class="pill gray">Private</span></div>
-        <div class="row-sub">Fastify API + Postgres</div>
+        <div class="row-title">pediaid-backend</div>
+        <div class="row-sub">API server · auto-deploys to Render on push</div>
       </div>
       <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-backend" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">pediaid-landing</div>
+        <div class="row-sub">Marketing page + privacy policy</div>
+      </div>
+      <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-landing" target="_blank" rel="noopener">open</a></div>
+    </div>
+    <div class="row">
+      <span class="dot green"></span>
+      <div class="row-main">
+        <div class="row-title">pediaid-status</div>
+        <div class="row-sub">This dashboard</div>
+      </div>
+      <div class="row-meta"><a href="https://github.com/mulgundsunil1918/pediaid-status" target="_blank" rel="noopener">open</a></div>
     </div>
   </div>
 
   <!-- ============================ CHECKLIST ============================ -->
-  <h2>Pending Checklist</h2>
+  <h2><span class="emoji">✅</span> Pending Checklist</h2>
   <div class="card checklist" id="checklist">
     <!-- populated by JS -->
   </div>
@@ -624,7 +638,7 @@
 </main>
 
 <footer>
-  PediAid Status · auto-built from GitHub · pings run from your browser · no analytics
+  PediAid Admin · static page on GitHub Pages · pings run from your browser · no analytics
 </footer>
 
 <script>
@@ -636,49 +650,46 @@
     {
       id: 'backend',
       title: 'Backend API',
-      sub:   'https://pediaid-backend.onrender.com/api/academics/health',
+      sub:   'pediaid-backend.onrender.com — the brain (may take ~30s to wake from sleep)',
       url:   'https://pediaid-backend.onrender.com/api/academics/health',
       mode:  'json'
     },
     {
-      id: 'frontend',
-      title: 'Frontend Web',
-      sub:   'https://mulgundsunil1918.github.io/pediaid-frontend/',
-      url:   'https://mulgundsunil1918.github.io/pediaid-frontend/',
+      id: 'app',
+      title: 'PediAid App (web)',
+      sub:   'pediaid.bridgr.co.in — the main app',
+      url:   'https://pediaid.bridgr.co.in/',
       mode:  'html'
     },
     {
-      id: 'flutter',
-      title: 'Flutter App',
-      sub:   'https://mulgundsunil1918.github.io/pediaid-flutter/',
-      url:   'https://mulgundsunil1918.github.io/pediaid-flutter/',
+      id: 'academics',
+      title: 'PediAid Academics',
+      sub:   'academics.pediaid.bridgr.co.in — guides & CME',
+      url:   'https://academics.pediaid.bridgr.co.in/',
       mode:  'html'
     },
     {
       id: 'landing',
       title: 'Landing Page',
-      sub:   'https://mulgundsunil1918.github.io/pediaid-landing/',
-      url:   'https://mulgundsunil1918.github.io/pediaid-landing/',
+      sub:   'info.pediaid.bridgr.co.in — public front page',
+      url:   'https://info.pediaid.bridgr.co.in/',
       mode:  'html'
     }
   ];
 
   // -----------------------------------------------------------------
-  // Pending checklist items (state persisted in localStorage)
+  // Pending checklist (v2 — refreshed July 2026; state in localStorage)
   // -----------------------------------------------------------------
   var CHECKLIST = [
-    'Set up Gmail SMTP on Render env vars',
-    'Turn off TESTING_MODE before launch',
-    'Fix moderator review page (blank bug)',
-    'In-app notifications working end to end',
-    'Build Flutter APK',
-    'Publish to Google Play Store',
-    'Publish to Apple App Store',
-    'Switch storage to AWS S3',
-    'Switch email to Resend at scale',
-    'Custom domain (pediaid.app)',
-    'Add systems & topics via Admin Panel',
-    'Verify first author credentials'
+    'Add FIREBASE_SERVICE_ACCOUNT_JSON on Render (activates push notifications)',
+    'Add ADMIN_BROADCAST_KEY on Render (the admin key for the panel above)',
+    'Generate web-push VAPID key in Firebase console (enables browser notifications)',
+    'Turn off TESTING_MODE on Render before launch',
+    'Switch EMAIL_MODE to smtp on Render (real emails instead of console logs)',
+    'Play Store: finish upload-key reset and publish',
+    'Apple: complete org account (D-U-N-S), then Submit for Review in App Store Connect',
+    'Ship next Play Store build so Android phones start receiving push notifications',
+    'Switch file storage to AWS S3 at scale'
   ];
 
   // -----------------------------------------------------------------
@@ -703,36 +714,49 @@
   });
 
   // -----------------------------------------------------------------
-  // Build checklist rows
+  // Overall status + stat tiles
   // -----------------------------------------------------------------
-  var checklistEl = document.getElementById('checklist');
-  var saved = {};
-  try {
-    saved = JSON.parse(localStorage.getItem('pediaid_status_checklist') || '{}');
-  } catch (e) { saved = {}; }
-  CHECKLIST.forEach(function(label, i) {
-    var key = 'item_' + i;
-    var checked = !!saved[key];
-    var row = document.createElement('label');
-    row.className = 'row';
-    row.htmlFor = 'cb_' + i;
-    row.innerHTML =
-      '<input type="checkbox" id="cb_' + i + '" data-key="' + key + '" ' +
-        (checked ? 'checked' : '') + '>' +
-      '<div class="row-main">' +
-        '<div class="row-title' + (checked ? ' done' : '') + '" data-title>' + label + '</div>' +
-      '</div>';
-    checklistEl.appendChild(row);
-  });
-  checklistEl.addEventListener('change', function(e) {
-    if (e.target.matches('input[type=checkbox]')) {
-      var key = e.target.getAttribute('data-key');
-      saved[key] = e.target.checked;
-      localStorage.setItem('pediaid_status_checklist', JSON.stringify(saved));
-      var title = e.target.closest('.row').querySelector('[data-title]');
-      title.classList.toggle('done', e.target.checked);
+  var results = {}; // id -> { up: bool, ms: number }
+
+  function updateSummary() {
+    var ids = Object.keys(results);
+    if (ids.length === 0) return;
+    var up = 0, fastest = null, slowest = null;
+    ids.forEach(function(id) {
+      var r = results[id];
+      if (r.up) up++;
+      if (r.up) {
+        if (!fastest || r.ms < fastest.ms) fastest = { id: id, ms: r.ms };
+        if (!slowest || r.ms > slowest.ms) slowest = { id: id, ms: r.ms };
+      }
+    });
+    document.getElementById('stat-online').textContent = up + ' / ' + CHECKS.length;
+    document.getElementById('stat-total').textContent = CHECKS.length;
+    function nameOf(id) {
+      for (var i = 0; i < CHECKS.length; i++) if (CHECKS[i].id === id) return CHECKS[i].title;
+      return id;
     }
-  });
+    if (fastest) {
+      document.getElementById('stat-fast').innerHTML = fastest.ms + ' <span class="unit">ms</span>';
+      document.getElementById('stat-fast-name').textContent = nameOf(fastest.id);
+    }
+    if (slowest) {
+      document.getElementById('stat-slow').innerHTML = slowest.ms + ' <span class="unit">ms</span>';
+      document.getElementById('stat-slow-name').textContent = nameOf(slowest.id);
+    }
+    var overall = document.getElementById('overall');
+    var overallText = document.getElementById('overall-text');
+    if (ids.length < CHECKS.length) {
+      overall.className = 'overall';
+      overallText.textContent = 'Checking all systems…';
+    } else if (up === CHECKS.length) {
+      overall.className = 'overall ok';
+      overallText.textContent = 'All systems live — everything is up and running';
+    } else {
+      overall.className = 'overall bad';
+      overallText.textContent = up + ' of ' + CHECKS.length + ' services responding — see checks below';
+    }
+  }
 
   // -----------------------------------------------------------------
   // Live check runner
@@ -746,26 +770,27 @@
     ms.textContent = '—';
     tm.textContent = 'checking…';
     var start = performance.now();
-    // We can't always read cross-origin responses, but 'no-cors' fetches still
-    // succeed when the server is up and fail when it's down, which is what we
-    // care about here. For the backend health endpoint, CORS is wide open, so
-    // 'cors' mode gives us real status codes and timings.
+    // no-cors fetches still succeed when the server is up and fail when it's
+    // down. The backend health endpoint has CORS open, so 'cors' mode gives
+    // real status codes there.
     var mode = c.id === 'backend' ? 'cors' : 'no-cors';
     fetch(c.url, { mode: mode, cache: 'no-store' })
       .then(function(res) {
         var dt = Math.round(performance.now() - start);
-        // In no-cors mode, res.status is 0 and type is 'opaque' even on
-        // success. Treat any non-throw as up.
         var up = mode === 'cors' ? res.ok : true;
+        results[c.id] = { up: up, ms: dt };
         dot.className = 'dot ' + (up ? 'green' : 'red');
         ms.textContent = dt + ' ms';
         tm.textContent = new Date().toLocaleTimeString('en-IN', { hour12: false });
+        updateSummary();
       })
       .catch(function() {
         var dt = Math.round(performance.now() - start);
+        results[c.id] = { up: false, ms: dt };
         dot.className = 'dot red';
         ms.textContent = dt + ' ms';
         tm.textContent = 'down · ' + new Date().toLocaleTimeString('en-IN', { hour12: false });
+        updateSummary();
       });
   }
 
@@ -788,11 +813,43 @@
     cdEl.textContent = remaining;
     if (elapsed < 5)   luEl.textContent = 'just now';
     else if (elapsed < 60) luEl.textContent = elapsed + 's ago';
-    else               luEl.textContent = Math.floor(elapsed/60) + 'm ' + (elapsed%60) + 's ago';
+    else               luEl.textContent = Math.floor(elapsed/60) + 'm ago';
     if (remaining === 0) runAllChecks();
   }, 1000);
 
   document.getElementById('refresh-btn').addEventListener('click', runAllChecks);
+
+  // -----------------------------------------------------------------
+  // Checklist rows (v2 key so the refreshed list starts clean)
+  // -----------------------------------------------------------------
+  var checklistEl = document.getElementById('checklist');
+  var saved = {};
+  try {
+    saved = JSON.parse(localStorage.getItem('pediaid_status_checklist_v2') || '{}');
+  } catch (e) { saved = {}; }
+  CHECKLIST.forEach(function(label, i) {
+    var key = 'item_' + i;
+    var checked = !!saved[key];
+    var row = document.createElement('label');
+    row.className = 'row';
+    row.htmlFor = 'cb_' + i;
+    row.innerHTML =
+      '<input type="checkbox" id="cb_' + i + '" data-key="' + key + '" ' +
+        (checked ? 'checked' : '') + '>' +
+      '<div class="row-main">' +
+        '<div class="row-title' + (checked ? ' done' : '') + '" data-title>' + label + '</div>' +
+      '</div>';
+    checklistEl.appendChild(row);
+  });
+  checklistEl.addEventListener('change', function(e) {
+    if (e.target.matches('input[type=checkbox]')) {
+      var key = e.target.getAttribute('data-key');
+      saved[key] = e.target.checked;
+      localStorage.setItem('pediaid_status_checklist_v2', JSON.stringify(saved));
+      var title = e.target.closest('.row').querySelector('[data-title]');
+      title.classList.toggle('done', e.target.checked);
+    }
+  });
 
   // -----------------------------------------------------------------
   // IST clock
