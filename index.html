@@ -207,6 +207,87 @@
     color: var(--gray);
     font-size: 11px;
   }
+  /* ---- Send Notification panel ---- */
+  .notify-form { padding: 16px 18px; }
+  .notify-form label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 12px 0 5px;
+  }
+  .notify-form label:first-child { margin-top: 0; }
+  .notify-form .counter {
+    font-weight: 400;
+    font-size: 10.5px;
+    color: var(--gray);
+  }
+  .notify-form input,
+  .notify-form textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    outline: none;
+  }
+  .notify-form input:focus,
+  .notify-form textarea:focus { border-color: var(--navy); }
+  .notify-form textarea { resize: vertical; min-height: 70px; }
+  .notify-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .notify-status { font-size: 12px; flex: 1; min-width: 0; }
+  .notify-status.ok  { color: var(--green); font-weight: 700; }
+  .notify-status.err { color: var(--red); font-weight: 600; }
+  #nt-send {
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  #nt-send:hover { background: var(--navy-dark); }
+  #nt-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  .notify-preview {
+    margin-top: 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .notify-preview .app-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--navy);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .notify-preview .pv-title { font-size: 13px; font-weight: 800; color: var(--text); }
+  .notify-preview .pv-body  { font-size: 12px; color: var(--text-soft); margin-top: 2px; white-space: pre-wrap; }
   @media (max-width: 640px) {
     header { padding: 18px 20px; }
     h1 { font-size: 18px; }
@@ -244,6 +325,34 @@
       next check in <strong id="countdown">60</strong>s
     </div>
     <button id="refresh-btn" type="button">Refresh now</button>
+  </div>
+
+  <!-- ============================ SEND NOTIFICATION ============================ -->
+  <h2>Send Push Notification</h2>
+  <div class="card">
+    <div class="notify-form">
+      <label for="nt-title">Title <span class="counter" id="nt-title-count">0/65</span></label>
+      <input type="text" id="nt-title" maxlength="65" placeholder="e.g. New TPN Calculator update" autocomplete="off">
+
+      <label for="nt-body">Message <span class="counter" id="nt-body-count">0/240</span></label>
+      <textarea id="nt-body" maxlength="240" rows="3" placeholder="e.g. Dextrose stock mixing now supports custom stock selection. Check it out!"></textarea>
+
+      <label for="nt-key">Admin key <span class="counter">saved in this browser after first send</span></label>
+      <input type="password" id="nt-key" placeholder="ADMIN_BROADCAST_KEY from Render" autocomplete="off">
+
+      <div class="notify-preview" id="nt-preview" style="display:none">
+        <div class="app-icon">Ped</div>
+        <div>
+          <div class="pv-title" id="nt-pv-title"></div>
+          <div class="pv-body" id="nt-pv-body"></div>
+        </div>
+      </div>
+
+      <div class="notify-actions">
+        <div class="notify-status" id="nt-status"></div>
+        <button type="button" id="nt-send">Send to all users</button>
+      </div>
+    </div>
   </div>
 
   <!-- ============================ LIVE CHECKS ============================ -->
@@ -704,6 +813,84 @@
   }
   updateClock();
   setInterval(updateClock, 1000);
+
+  // -----------------------------------------------------------------
+  // Send Push Notification panel
+  // -----------------------------------------------------------------
+  var BROADCAST_URL = 'https://pediaid-backend.onrender.com/api/push/broadcast';
+  var KEY_STORE = 'pediaid_admin_broadcast_key';
+
+  var ntTitle  = document.getElementById('nt-title');
+  var ntBody   = document.getElementById('nt-body');
+  var ntKey    = document.getElementById('nt-key');
+  var ntSend   = document.getElementById('nt-send');
+  var ntStatus = document.getElementById('nt-status');
+  var ntPreview = document.getElementById('nt-preview');
+
+  // Restore the remembered admin key so sending is one-tap after setup.
+  try { ntKey.value = localStorage.getItem(KEY_STORE) || ''; } catch (e) {}
+
+  function updateNotifyUI() {
+    document.getElementById('nt-title-count').textContent = ntTitle.value.length + '/65';
+    document.getElementById('nt-body-count').textContent  = ntBody.value.length + '/240';
+    var hasText = ntTitle.value.trim() || ntBody.value.trim();
+    ntPreview.style.display = hasText ? 'flex' : 'none';
+    document.getElementById('nt-pv-title').textContent = ntTitle.value.trim() || 'Notification title';
+    document.getElementById('nt-pv-body').textContent  = ntBody.value.trim() || 'Notification message';
+  }
+  ntTitle.addEventListener('input', updateNotifyUI);
+  ntBody.addEventListener('input', updateNotifyUI);
+
+  ntSend.addEventListener('click', function() {
+    var title = ntTitle.value.trim();
+    var body  = ntBody.value.trim();
+    var key   = ntKey.value.trim();
+
+    ntStatus.className = 'notify-status';
+    if (!title || !body) {
+      ntStatus.className = 'notify-status err';
+      ntStatus.textContent = 'Title and message are both required.';
+      return;
+    }
+    if (!key) {
+      ntStatus.className = 'notify-status err';
+      ntStatus.textContent = 'Enter the admin key (ADMIN_BROADCAST_KEY on Render).';
+      return;
+    }
+    if (!confirm('Send this notification to ALL PediAid users?\n\n' + title + '\n' + body +
+                 '\n\nThis cannot be undone or recalled.')) return;
+
+    ntSend.disabled = true;
+    ntStatus.textContent = 'Sending…';
+
+    fetch(BROADCAST_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
+      body: JSON.stringify({ title: title, body: body })
+    })
+      .then(function(res) {
+        return res.json().catch(function(){ return {}; }).then(function(data) {
+          if (res.ok) {
+            try { localStorage.setItem(KEY_STORE, key); } catch (e) {}
+            ntStatus.className = 'notify-status ok';
+            ntStatus.textContent = '✓ Sent at ' +
+              new Date().toLocaleTimeString('en-IN', { hour12: false });
+            ntTitle.value = '';
+            ntBody.value = '';
+            updateNotifyUI();
+          } else {
+            ntStatus.className = 'notify-status err';
+            ntStatus.textContent = 'Failed (' + res.status + '): ' +
+              (data.message || data.error || 'unknown error');
+          }
+        });
+      })
+      .catch(function(err) {
+        ntStatus.className = 'notify-status err';
+        ntStatus.textContent = 'Network error — backend unreachable (' + err + ')';
+      })
+      .then(function() { ntSend.disabled = false; });
+  });
 
   // Kick off
   runAllChecks();
