@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
 <title>PediAid Admin — Mission Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -327,9 +328,110 @@
     .arch { padding: 18px 12px 22px; }
     .arch-box { min-width: 0; max-width: none; flex: 1 1 100%; }
   }
+  /* ---- Login gate (deterrent only; real lock is the backend admin key) ---- */
+  #gate {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    background:
+      radial-gradient(700px 260px at 85% -60px, rgba(96,165,250,0.35), transparent 65%),
+      linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  }
+  #gate .gate-card {
+    width: 100%; max-width: 360px;
+    background: var(--card);
+    border-radius: 18px;
+    padding: 26px 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  #gate .gate-logo {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--navy), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin: 0 auto 14px;
+  }
+  #gate h2 { text-align: center; font-size: 18px; margin: 0 0 2px; color: var(--text); }
+  #gate .gate-sub { text-align: center; font-size: 12px; color: var(--gray); margin-bottom: 18px; }
+  #gate label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin: 12px 0 5px; }
+  #gate input[type=text], #gate input[type=password] {
+    width: 100%; font-family: inherit; font-size: 14px; color: var(--text);
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: 11px;
+    padding: 11px 13px; outline: none;
+  }
+  #gate input:focus { border-color: var(--accent); background: #fff; }
+  #gate .gate-remember { display: flex; align-items: center; gap: 7px; margin: 14px 0 4px; font-size: 12.5px; color: var(--text-soft); }
+  #gate button {
+    width: 100%; margin-top: 16px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+    color: #fff; border: none; padding: 12px; border-radius: 12px;
+    font-family: inherit; font-weight: 800; font-size: 14px; cursor: pointer;
+  }
+  #gate .gate-err { color: var(--red); font-size: 12.5px; font-weight: 600; margin-top: 10px; min-height: 16px; text-align: center; }
+  #gate .gate-note { font-size: 10.5px; color: var(--gray); text-align: center; margin-top: 14px; line-height: 1.5; }
 </style>
 </head>
 <body>
+
+<!-- Login gate. NOTE: this is a client-side deterrent to keep casual visitors
+     out and is NOT bypass-proof (the page source is public). The real security
+     for the only sensitive action — sending a push notification — is the
+     server-verified admin key checked by the backend. -->
+<div id="gate">
+  <form class="gate-card" id="gate-form" autocomplete="on">
+    <div class="gate-logo">🔒</div>
+    <h2>PediAid Admin</h2>
+    <div class="gate-sub">Sign in to view the dashboard</div>
+    <label for="gate-user">Username</label>
+    <input type="text" id="gate-user" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+    <label for="gate-pass">Password</label>
+    <input type="password" id="gate-pass" name="password" autocomplete="current-password" required>
+    <label class="gate-remember"><input type="checkbox" id="gate-remember" checked> Remember me on this device</label>
+    <button type="submit">Sign in</button>
+    <div class="gate-err" id="gate-err"></div>
+    <div class="gate-note">Private admin console. Casual-access deterrent only —
+      broadcasts still require the server-side admin key.</div>
+  </form>
+</div>
+
+<script>
+(function () {
+  // Credential check is client-side (GitHub Pages has no server). Only the
+  // SHA-256 hash of the password is stored here, never the plaintext.
+  var AUTH_USER = 'admin';
+  var AUTH_HASH = '5d4e8db6a998c00cf74848bb67b65aa8425ab5a1523b7af0b0b1383aebf8713f'; // temp: "PediAid-Status-2026"
+  var STORE = 'pediaid_status_auth_v1';
+
+  function reveal() {
+    var g = document.getElementById('gate');
+    if (g) g.remove();
+    document.body.style.overflow = '';
+  }
+  async function sha256(s) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  // Already signed in on this device?
+  try { if (localStorage.getItem(STORE) === AUTH_HASH) { reveal(); return; } } catch (e) {}
+
+  document.body.style.overflow = 'hidden';
+  document.getElementById('gate-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var u = document.getElementById('gate-user').value.trim().toLowerCase();
+    var p = document.getElementById('gate-pass').value;
+    var err = document.getElementById('gate-err');
+    var h = await sha256(p);
+    if (u === AUTH_USER && h === AUTH_HASH) {
+      if (document.getElementById('gate-remember').checked) {
+        try { localStorage.setItem(STORE, AUTH_HASH); } catch (e) {}
+      }
+      reveal();
+    } else {
+      err.textContent = 'Wrong username or password.';
+    }
+  });
+})();
+</script>
 
 <header class="hero">
   <div class="hero-inner">
