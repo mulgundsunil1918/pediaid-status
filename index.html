@@ -642,34 +642,34 @@
   <!-- ============================ HOSTING ============================ -->
   <h2><span class="emoji">🚀</span> Hosting &amp; App Stores</h2>
   <div class="card">
-    <div class="row">
-      <span class="dot green"></span>
+    <div class="row" id="host-app">
+      <span class="dot gray" data-host-dot></span>
       <div class="row-main">
-        <div class="row-title">PediAid App (web) <span class="pill green">Live</span></div>
+        <div class="row-title">PediAid App (web) <span class="pill gray" data-host-pill>Not checked</span></div>
         <div class="row-sub">Flutter web build · GitHub Pages · manual deploy from laptop</div>
       </div>
       <div class="row-meta"><a href="https://pediaid.bridgr.co.in" target="_blank" rel="noopener">open</a></div>
     </div>
-    <div class="row">
-      <span class="dot green"></span>
+    <div class="row" id="host-academics">
+      <span class="dot gray" data-host-dot></span>
       <div class="row-main">
-        <div class="row-title">PediAid Academics <span class="pill green">Live</span></div>
+        <div class="row-title">PediAid Academics <span class="pill gray" data-host-pill>Not checked</span></div>
         <div class="row-sub">React site · GitHub Pages · auto-deploys on every push</div>
       </div>
       <div class="row-meta"><a href="https://academics.pediaid.bridgr.co.in" target="_blank" rel="noopener">open</a></div>
     </div>
-    <div class="row">
-      <span class="dot green"></span>
+    <div class="row" id="host-landing">
+      <span class="dot gray" data-host-dot></span>
       <div class="row-main">
-        <div class="row-title">Landing Page <span class="pill green">Live</span></div>
+        <div class="row-title">Landing Page <span class="pill gray" data-host-pill>Not checked</span></div>
         <div class="row-sub">Static site · GitHub Pages · privacy policy for app stores</div>
       </div>
       <div class="row-meta"><a href="https://info.pediaid.bridgr.co.in" target="_blank" rel="noopener">open</a></div>
     </div>
-    <div class="row">
-      <span class="dot green"></span>
+    <div class="row" id="host-backend">
+      <span class="dot gray" data-host-dot></span>
       <div class="row-main">
-        <div class="row-title">Backend API — Render <span class="pill green">Live</span></div>
+        <div class="row-title">Backend API — Render <span class="pill gray" data-host-pill>Not checked</span></div>
         <div class="row-sub">Fastify + TypeScript · free tier (sleeps when idle, wakes in ~30s)</div>
       </div>
       <div class="row-meta"><a href="https://dashboard.render.com" target="_blank" rel="noopener">dashboard</a></div>
@@ -695,34 +695,34 @@
   <!-- ============================ SERVICES ============================ -->
   <h2><span class="emoji">🧩</span> Connected Services</h2>
   <div class="card">
-    <div class="row">
-      <span class="dot red"></span>
+    <div class="row" id="svc-database">
+      <span class="dot gray" data-svc-dot></span>
       <div class="row-main">
-        <div class="row-title">Neon PostgreSQL <span class="pill red">Paused — quota exhausted</span></div>
-        <div class="row-sub">Database · Singapore · free tier · resets 1 Aug 2026 — see Known Issues above</div>
+        <div class="row-title">Neon PostgreSQL <span class="pill gray" data-svc-pill>Not checked</span></div>
+        <div class="row-sub">Database · Singapore · free tier · resets 1 Aug 2026 if currently paused</div>
       </div>
       <div class="row-meta"><a href="https://console.neon.tech" target="_blank" rel="noopener">console</a></div>
     </div>
-    <div class="row">
-      <span class="dot yellow"></span>
+    <div class="row" id="svc-firebase">
+      <span class="dot gray" data-svc-dot></span>
       <div class="row-main">
-        <div class="row-title">Firebase Push (pediaid-app) <span class="pill yellow">Needs Render keys</span></div>
+        <div class="row-title">Firebase Push (pediaid-app) <span class="pill gray" data-svc-pill>Not checked</span></div>
         <div class="row-sub">Set FIREBASE_SERVICE_ACCOUNT_JSON + ADMIN_BROADCAST_KEY on Render to activate</div>
       </div>
       <div class="row-meta"><a href="https://console.firebase.google.com/project/pediaid-app" target="_blank" rel="noopener">console</a></div>
     </div>
-    <div class="row">
-      <span class="dot yellow"></span>
+    <div class="row" id="svc-email">
+      <span class="dot gray" data-svc-dot></span>
       <div class="row-main">
-        <div class="row-title">Gmail SMTP <span class="pill yellow">Setup pending</span></div>
-        <div class="row-sub">pediaid.app@gmail.com · EMAIL_MODE=console on Render (emails print to logs only)</div>
+        <div class="row-title">Gmail SMTP <span class="pill gray" data-svc-pill>Not checked</span></div>
+        <div class="row-sub" data-svc-sub>pediaid.app@gmail.com</div>
       </div>
       <div class="row-meta">—</div>
     </div>
-    <div class="row">
-      <span class="dot yellow"></span>
+    <div class="row" id="svc-auth">
+      <span class="dot gray" data-svc-dot></span>
       <div class="row-main">
-        <div class="row-title">Auth (JWT) <span class="pill yellow">Testing mode ON</span></div>
+        <div class="row-title">Auth (JWT) <span class="pill gray" data-svc-pill>Not checked</span></div>
         <div class="row-sub">RS256 · remember to turn TESTING_MODE off before launch</div>
       </div>
       <div class="row-meta">—</div>
@@ -761,7 +761,7 @@
       id: 'backend',
       title: 'Backend API',
       sub:   'pediaid-backend.onrender.com — the brain (may take ~30s to wake from sleep)',
-      url:   'https://pediaid-backend.onrender.com/health',
+      url:   'https://pediaid-backend.onrender.com/api/academics/health',
       mode:  'json'
     },
     {
@@ -788,32 +788,106 @@
   ];
 
   // -----------------------------------------------------------------
-  // Known issues — manually maintained, NOT derived from the live pings
-  // above (those only prove a URL responds; they can't see DB-level
-  // problems like a paused Neon project). Edit this array as things
-  // break or get fixed. Empty array = green "no known issues" banner.
+  // Known issues. Two sources, merged on every "Check now":
+  //   1. STATIC_ISSUES — things a URL ping can't detect and that don't
+  //      have a live signal (e.g. "awaiting App Store review"). Edit
+  //      this array by hand as those change.
+  //   2. Live-detected issues — e.g. the database check failing. These
+  //      come from runHealthCheck() below and clear themselves the
+  //      next time "Check now" confirms the problem is gone.
+  // Before the first check, this shows a neutral "not checked yet"
+  // state rather than falsely claiming "all clear".
   // -----------------------------------------------------------------
-  var KNOWN_ISSUES = [
-    {
-      title: 'Neon PostgreSQL is paused — monthly compute quota exhausted',
-      detail: 'The database isn\'t accepting connections right now. Anything that reads or writes live data — login, Never Again posts, CME submissions, guide search, the visitor counter — will fail until it resets. Static content and the offline calculators are unaffected; they don\'t touch the database.',
-      eta: 'Resets automatically 1 Aug 2026 with the new billing cycle, or upgrade the Neon plan to lift it sooner.'
-    }
-  ];
+  var STATIC_ISSUES = [];
+  var liveIssues = [];
 
-  var issuesEl = document.getElementById('known-issues');
-  if (KNOWN_ISSUES.length === 0) {
-    issuesEl.innerHTML = '<div class="issues-empty">✅ No known issues right now.</div>';
-  } else {
-    KNOWN_ISSUES.forEach(function (issue) {
-      var card = document.createElement('div');
-      card.className = 'issue-card';
-      card.innerHTML =
-        '<div class="issue-title">🔴 ' + issue.title + '</div>' +
-        '<div class="issue-detail">' + issue.detail + '</div>' +
-        (issue.eta ? '<div class="issue-eta">⏱ ' + issue.eta + '</div>' : '');
-      issuesEl.appendChild(card);
-    });
+  function renderKnownIssues(checked) {
+    var issuesEl = document.getElementById('known-issues');
+    var all = STATIC_ISSUES.concat(liveIssues);
+    if (!checked) {
+      issuesEl.innerHTML = '<div class="issues-empty" style="background:#f8fafc;border-color:var(--border);color:var(--text-soft);">⏳ Not checked yet — press "Check now" above.</div>';
+    } else if (all.length === 0) {
+      issuesEl.innerHTML = '<div class="issues-empty">✅ No known issues right now.</div>';
+    } else {
+      issuesEl.innerHTML = '';
+      all.forEach(function (issue) {
+        var card = document.createElement('div');
+        card.className = 'issue-card';
+        card.innerHTML =
+          '<div class="issue-title">🔴 ' + issue.title + '</div>' +
+          '<div class="issue-detail">' + issue.detail + '</div>' +
+          (issue.eta ? '<div class="issue-eta">⏱ ' + issue.eta + '</div>' : '');
+        issuesEl.appendChild(card);
+      });
+    }
+  }
+  renderKnownIssues(false);
+
+  // -----------------------------------------------------------------
+  // Live health check — /api/academics/health reports database, email,
+  // and storage mode in one call. Only ever invoked from "Check now"
+  // (see runAllChecks below), never on a timer.
+  // -----------------------------------------------------------------
+  function setSvcRow(id, ok, okLabel, badLabel, subText) {
+    var row = document.getElementById(id);
+    if (!row) return;
+    var dot = row.querySelector('[data-svc-dot], [data-host-dot]');
+    var pill = row.querySelector('[data-svc-pill], [data-host-pill]');
+    dot.className = 'dot ' + (ok ? 'green' : 'red');
+    pill.className = 'pill ' + (ok ? 'green' : 'red');
+    pill.textContent = ok ? okLabel : badLabel;
+    if (subText) {
+      var sub = row.querySelector('[data-svc-sub]');
+      if (sub) sub.textContent = subText;
+    }
+  }
+
+  function applyHealthResult(data) {
+    liveIssues = [];
+    if (data && data.checks) {
+      var dbOk = data.checks.database === 'ok';
+      setSvcRow('svc-database', dbOk, 'Connected', 'Paused — quota exhausted');
+      if (!dbOk) {
+        liveIssues.push({
+          title: 'Neon PostgreSQL is paused — monthly compute quota exhausted',
+          detail: 'The database isn\'t accepting connections right now. Anything that reads or writes live data — login, Never Again posts, CME submissions, guide search, the visitor counter — will fail until it resets. Static content and the offline calculators are unaffected; they don\'t touch the database.',
+          eta: 'Resets automatically 1 Aug 2026 with the new billing cycle, or upgrade the Neon plan to lift it sooner. This card clears itself next time you press "Check now" after it\'s back.'
+        });
+      }
+      var emailOk = data.checks.email === 'ok';
+      setSvcRow(
+        'svc-email', emailOk, 'Connected', 'Console mode — not sending real emails',
+        emailOk ? 'pediaid.app@gmail.com · sending real emails' : 'pediaid.app@gmail.com · EMAIL_MODE=console on Render (emails print to logs only)'
+      );
+
+      // Firebase: "not configured" is an expected pending-setup state, not
+      // a failure, so it gets yellow rather than red.
+      var fbRow = document.getElementById('svc-firebase');
+      if (fbRow) {
+        var fbOk = data.checks.firebasePush === 'ok';
+        fbRow.querySelector('[data-svc-dot]').className = 'dot ' + (fbOk ? 'green' : 'yellow');
+        var fbPill = fbRow.querySelector('[data-svc-pill]');
+        fbPill.className = 'pill ' + (fbOk ? 'green' : 'yellow');
+        fbPill.textContent = fbOk ? 'Active' : 'Needs Render keys';
+      }
+
+      // Auth testing mode: "on" is an intentional dev setting, not a
+      // failure — yellow caution, not red.
+      var authRow = document.getElementById('svc-auth');
+      if (authRow) {
+        var testingOn = data.checks.authTestingMode === 'on';
+        authRow.querySelector('[data-svc-dot]').className = 'dot ' + (testingOn ? 'yellow' : 'green');
+        var authPill = authRow.querySelector('[data-svc-pill]');
+        authPill.className = 'pill ' + (testingOn ? 'yellow' : 'green');
+        authPill.textContent = testingOn ? 'Testing mode ON' : 'Production mode';
+      }
+    } else {
+      setSvcRow('svc-database', false, 'Connected', 'Unknown — backend unreachable');
+      setSvcRow('svc-email', false, 'Connected', 'Unknown — backend unreachable');
+      setSvcRow('svc-firebase', false, 'Active', 'Unknown — backend unreachable');
+      setSvcRow('svc-auth', false, 'Production mode', 'Unknown — backend unreachable');
+    }
+    renderKnownIssues(true);
   }
 
   // -----------------------------------------------------------------
@@ -886,16 +960,21 @@
     // Mirror each result onto its matching architecture-diagram box so the
     // diagram doubles as a live map, not just decoration.
     var archMap = { backend: 'arch-backend', app: 'arch-app', academics: 'arch-academics', landing: 'arch-landing' };
+    var hostMap = { backend: 'host-backend', app: 'host-app', academics: 'host-academics', landing: 'host-landing' };
     ids.forEach(function (id) {
-      var boxId = archMap[id];
-      if (!boxId) return;
-      var box = document.getElementById(boxId);
-      if (!box) return;
-      var dot = box.querySelector('[data-arch-dot]');
-      var text = box.querySelector('[data-arch-text]');
       var r = results[id];
-      dot.className = 'dot ' + (r.up ? 'green' : 'red');
-      text.textContent = r.up ? ('Up · ' + r.ms + ' ms') : 'Not responding';
+      var boxId = archMap[id];
+      if (boxId) {
+        var box = document.getElementById(boxId);
+        if (box) {
+          var dot = box.querySelector('[data-arch-dot]');
+          var text = box.querySelector('[data-arch-text]');
+          dot.className = 'dot ' + (r.up ? 'green' : 'red');
+          text.textContent = r.up ? ('Up · ' + r.ms + ' ms') : 'Not responding';
+        }
+      }
+      var hostId = hostMap[id];
+      if (hostId) setSvcRow(hostId, r.up, 'Live', 'Not responding');
     });
 
     var overall = document.getElementById('overall');
@@ -937,6 +1016,16 @@
         ms.textContent = dt + ' ms';
         tm.textContent = new Date().toLocaleTimeString('en-IN', { hour12: false });
         updateSummary();
+        // The backend check hits /api/academics/health, which reports
+        // database/email/storage status in its body — use it to drive
+        // the Neon/Gmail rows and the Known Issues section live.
+        if (c.id === 'backend') {
+          if (up) {
+            res.json().then(applyHealthResult).catch(function () { applyHealthResult(null); });
+          } else {
+            applyHealthResult(null);
+          }
+        }
       })
       .catch(function() {
         var dt = Math.round(performance.now() - start);
@@ -945,6 +1034,7 @@
         ms.textContent = dt + ' ms';
         tm.textContent = 'down · ' + new Date().toLocaleTimeString('en-IN', { hour12: false });
         updateSummary();
+        if (c.id === 'backend') applyHealthResult(null);
       });
   }
 
