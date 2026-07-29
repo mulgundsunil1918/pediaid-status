@@ -854,11 +854,19 @@
           eta: 'Resets automatically 1 Aug 2026 with the new billing cycle, or upgrade the Neon plan to lift it sooner. This card clears itself next time you press "Check now" after it\'s back.'
         });
       }
-      var emailOk = data.checks.email === 'ok';
-      setSvcRow(
-        'svc-email', emailOk, 'Connected', 'Console mode — not sending real emails',
-        emailOk ? 'pediaid.app@gmail.com · sending real emails' : 'pediaid.app@gmail.com · EMAIL_MODE=console on Render (emails print to logs only)'
-      );
+      // Console mode is an intentional pending-setup state (like Firebase
+      // "not configured"), not a failure — yellow rather than red.
+      var emailRow = document.getElementById('svc-email');
+      if (emailRow) {
+        var emailOk = data.checks.email === 'ok';
+        emailRow.querySelector('[data-svc-dot]').className = 'dot ' + (emailOk ? 'green' : 'yellow');
+        var emailPill = emailRow.querySelector('[data-svc-pill]');
+        emailPill.className = 'pill ' + (emailOk ? 'green' : 'yellow');
+        emailPill.textContent = emailOk ? 'Connected' : 'Console mode';
+        emailRow.querySelector('[data-svc-sub]').textContent = emailOk
+          ? 'pediaid.app@gmail.com · sending real emails'
+          : 'pediaid.app@gmail.com · EMAIL_MODE=console on Render (emails print to logs only)';
+      }
 
       // Firebase: "not configured" is an expected pending-setup state, not
       // a failure, so it gets yellow rather than red.
