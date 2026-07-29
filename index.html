@@ -239,6 +239,43 @@
     letter-spacing: 0.3px;
   }
   .arch-arrow .down { font-size: 16px; display: block; line-height: 1; margin-bottom: 2px; color: #94a3b8; }
+  .arch-status {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 700; margin-top: 8px;
+    color: var(--gray);
+  }
+  .arch-status .dot { width: 8px; height: 8px; }
+  .arch-box.issue { background: #fef2f2; border-color: #fecaca; }
+  .arch-box.issue .arch-name { color: #991b1b; }
+
+  /* ====================== KNOWN ISSUES ====================== */
+  .issues-section { margin-top: -20px; }
+  .issue-card {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-left: 5px solid var(--red);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .issue-card:last-child { margin-bottom: 0; }
+  .issue-title {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 800; font-size: 14px; color: #991b1b;
+  }
+  .issue-detail { font-size: 12.5px; color: #7f1d1d; margin-top: 6px; line-height: 1.55; }
+  .issue-eta {
+    font-size: 11.5px; color: #991b1b; margin-top: 8px;
+    font-weight: 700; display: flex; align-items: center; gap: 6px;
+  }
+  .issues-empty {
+    display: flex; align-items: center; gap: 10px;
+    background: #f0fdf4; border: 1.5px solid #bbf7d0;
+    border-radius: 14px; padding: 14px 18px;
+    font-size: 13px; font-weight: 700; color: #166534;
+    box-shadow: var(--shadow);
+  }
 
   /* ====================== SEND NOTIFICATION ====================== */
   .notify-form { padding: 18px 20px 20px; }
@@ -450,7 +487,7 @@
     </div>
     <div class="overall" id="overall">
       <span class="big-dot"></span>
-      <span id="overall-text">Checking all systems…</span>
+      <span id="overall-text">Not checked yet — press "Check now" below</span>
     </div>
   </div>
 </header>
@@ -475,15 +512,24 @@
       <div class="stat-sub" id="stat-slow-name">&nbsp;</div>
     </div>
     <div class="stat">
-      <div class="stat-label">Next auto-check</div>
-      <div class="stat-value"><span id="countdown">60</span> <span class="unit">s</span></div>
-      <div class="stat-sub">updated <span id="last-updated">just now</span></div>
+      <div class="stat-label">Last checked</div>
+      <div class="stat-value" style="font-size:18px;" id="last-updated">Not yet run</div>
+      <div class="stat-sub">nothing runs automatically</div>
     </div>
   </div>
 
   <div class="refresh-bar">
-    <div>Pings run from <strong>your browser</strong> every 60 seconds — no server, no analytics.</div>
+    <div>Checks only run from <strong>your browser</strong> when you press the button — no auto-polling, no server, no analytics.</div>
     <button id="refresh-btn" type="button">Check now</button>
+  </div>
+
+  <!-- ============================ KNOWN ISSUES ============================ -->
+  <!-- Manually maintained — separate from the live pings above on purpose,
+       since a plain /health or page-load check can't see DB-level problems
+       like a paused Neon project. Edit KNOWN_ISSUES in the script below. -->
+  <h2><span class="emoji">🚨</span> Known Issues</h2>
+  <div class="issues-section" id="known-issues">
+    <!-- populated by JS -->
   </div>
 
   <!-- ============================ SEND NOTIFICATION ============================ -->
@@ -535,44 +581,49 @@
     <div class="arch-arrow"><span class="down">▼</span>they use one of these front doors</div>
 
     <div class="arch-tier">
-      <div class="arch-box">
+      <div class="arch-box" id="arch-app">
         <div class="arch-icon">📱</div>
         <div class="arch-name">PediAid App</div>
         <div class="arch-link"><a href="https://pediaid.bridgr.co.in" target="_blank" rel="noopener">pediaid.bridgr.co.in</a></div>
         <div class="arch-desc">The main app — calculators, growth charts, drug formulary, guides. Same code runs on Web, Android &amp; iOS (Flutter).</div>
+        <div class="arch-status"><span class="dot gray" data-arch-dot></span><span data-arch-text>Press "Check now" above</span></div>
       </div>
-      <div class="arch-box">
+      <div class="arch-box" id="arch-academics">
         <div class="arch-icon">🎓</div>
         <div class="arch-name">PediAid Academics</div>
         <div class="arch-link"><a href="https://academics.pediaid.bridgr.co.in" target="_blank" rel="noopener">academics.pediaid.bridgr.co.in</a></div>
         <div class="arch-desc">Guides, chapters, CME events &amp; trial summaries. Opens inside the app too (the Academics tab).</div>
+        <div class="arch-status"><span class="dot gray" data-arch-dot></span><span data-arch-text>Press "Check now" above</span></div>
       </div>
-      <div class="arch-box">
+      <div class="arch-box" id="arch-landing">
         <div class="arch-icon">📄</div>
         <div class="arch-name">Landing Page</div>
         <div class="arch-link"><a href="https://info.pediaid.bridgr.co.in" target="_blank" rel="noopener">info.pediaid.bridgr.co.in</a></div>
         <div class="arch-desc">Public marketing page &amp; privacy policy — what new users see first.</div>
+        <div class="arch-status"><span class="dot gray" data-arch-dot></span><span data-arch-text>Press "Check now" above</span></div>
       </div>
     </div>
 
     <div class="arch-arrow"><span class="down">▼</span>all of them talk to one brain</div>
 
     <div class="arch-tier">
-      <div class="arch-box core" style="max-width:520px;">
+      <div class="arch-box core" style="max-width:520px;" id="arch-backend">
         <div class="arch-icon">⚙️</div>
         <div class="arch-name">Backend API — Render</div>
         <div class="arch-link"><a href="https://pediaid-backend.onrender.com/health" target="_blank" rel="noopener">pediaid-backend.onrender.com</a></div>
         <div class="arch-desc">Handles logins, guides &amp; chapters, the visitor counter, "report an issue" emails, and your push-notification broadcasts. Auto-deploys whenever code is pushed to GitHub.</div>
+        <div class="arch-status"><span class="dot gray" data-arch-dot></span><span data-arch-text style="color:rgba(255,255,255,0.7)">Press "Check now" above</span></div>
       </div>
     </div>
 
     <div class="arch-arrow"><span class="down">▼</span>which stores &amp; sends through</div>
 
     <div class="arch-tier">
-      <div class="arch-box">
+      <div class="arch-box issue">
         <div class="arch-icon">🗄️</div>
         <div class="arch-name">Neon PostgreSQL</div>
         <div class="arch-desc">The database — users, guides, CME records, visit counts. Singapore region, free tier.</div>
+        <div class="arch-status"><span class="dot red"></span><span style="color:#991b1b">Paused — see Known Issues</span></div>
       </div>
       <div class="arch-box">
         <div class="arch-icon">🔔</div>
@@ -645,10 +696,10 @@
   <h2><span class="emoji">🧩</span> Connected Services</h2>
   <div class="card">
     <div class="row">
-      <span class="dot green"></span>
+      <span class="dot red"></span>
       <div class="row-main">
-        <div class="row-title">Neon PostgreSQL <span class="pill green">Connected</span></div>
-        <div class="row-sub">Database · Singapore · free tier · 0.5 GB</div>
+        <div class="row-title">Neon PostgreSQL <span class="pill red">Paused — quota exhausted</span></div>
+        <div class="row-sub">Database · Singapore · free tier · resets 1 Aug 2026 — see Known Issues above</div>
       </div>
       <div class="row-meta"><a href="https://console.neon.tech" target="_blank" rel="noopener">console</a></div>
     </div>
@@ -737,6 +788,35 @@
   ];
 
   // -----------------------------------------------------------------
+  // Known issues — manually maintained, NOT derived from the live pings
+  // above (those only prove a URL responds; they can't see DB-level
+  // problems like a paused Neon project). Edit this array as things
+  // break or get fixed. Empty array = green "no known issues" banner.
+  // -----------------------------------------------------------------
+  var KNOWN_ISSUES = [
+    {
+      title: 'Neon PostgreSQL is paused — monthly compute quota exhausted',
+      detail: 'The database isn\'t accepting connections right now. Anything that reads or writes live data — login, Never Again posts, CME submissions, guide search, the visitor counter — will fail until it resets. Static content and the offline calculators are unaffected; they don\'t touch the database.',
+      eta: 'Resets automatically 1 Aug 2026 with the new billing cycle, or upgrade the Neon plan to lift it sooner.'
+    }
+  ];
+
+  var issuesEl = document.getElementById('known-issues');
+  if (KNOWN_ISSUES.length === 0) {
+    issuesEl.innerHTML = '<div class="issues-empty">✅ No known issues right now.</div>';
+  } else {
+    KNOWN_ISSUES.forEach(function (issue) {
+      var card = document.createElement('div');
+      card.className = 'issue-card';
+      card.innerHTML =
+        '<div class="issue-title">🔴 ' + issue.title + '</div>' +
+        '<div class="issue-detail">' + issue.detail + '</div>' +
+        (issue.eta ? '<div class="issue-eta">⏱ ' + issue.eta + '</div>' : '');
+      issuesEl.appendChild(card);
+    });
+  }
+
+  // -----------------------------------------------------------------
   // Pending checklist (v2 — refreshed July 2026; state in localStorage)
   // -----------------------------------------------------------------
   var CHECKLIST = [
@@ -803,11 +883,26 @@
       document.getElementById('stat-slow').innerHTML = slowest.ms + ' <span class="unit">ms</span>';
       document.getElementById('stat-slow-name').textContent = nameOf(slowest.id);
     }
+    // Mirror each result onto its matching architecture-diagram box so the
+    // diagram doubles as a live map, not just decoration.
+    var archMap = { backend: 'arch-backend', app: 'arch-app', academics: 'arch-academics', landing: 'arch-landing' };
+    ids.forEach(function (id) {
+      var boxId = archMap[id];
+      if (!boxId) return;
+      var box = document.getElementById(boxId);
+      if (!box) return;
+      var dot = box.querySelector('[data-arch-dot]');
+      var text = box.querySelector('[data-arch-text]');
+      var r = results[id];
+      dot.className = 'dot ' + (r.up ? 'green' : 'red');
+      text.textContent = r.up ? ('Up · ' + r.ms + ' ms') : 'Not responding';
+    });
+
     var overall = document.getElementById('overall');
     var overallText = document.getElementById('overall-text');
     if (ids.length < CHECKS.length) {
       overall.className = 'overall';
-      overallText.textContent = 'Checking all systems…';
+      overallText.textContent = 'Checking…';
     } else if (up === CHECKS.length) {
       overall.className = 'overall ok';
       overallText.textContent = 'All systems live — everything is up and running';
@@ -855,26 +950,9 @@
 
   function runAllChecks() {
     CHECKS.forEach(runCheck);
-    document.getElementById('last-updated').textContent = 'just now';
-    lastRun = Date.now();
+    document.getElementById('last-updated').textContent =
+      new Date().toLocaleTimeString('en-IN', { hour12: false });
   }
-
-  // -----------------------------------------------------------------
-  // Countdown + auto-refresh every 60s
-  // -----------------------------------------------------------------
-  var lastRun = Date.now();
-  var INTERVAL = 60;
-  var cdEl = document.getElementById('countdown');
-  var luEl = document.getElementById('last-updated');
-  setInterval(function() {
-    var elapsed = Math.floor((Date.now() - lastRun) / 1000);
-    var remaining = Math.max(0, INTERVAL - elapsed);
-    cdEl.textContent = remaining;
-    if (elapsed < 5)   luEl.textContent = 'just now';
-    else if (elapsed < 60) luEl.textContent = elapsed + 's ago';
-    else               luEl.textContent = Math.floor(elapsed/60) + 'm ago';
-    if (remaining === 0) runAllChecks();
-  }, 1000);
 
   document.getElementById('refresh-btn').addEventListener('click', runAllChecks);
 
@@ -1008,8 +1086,7 @@
       .then(function() { ntSend.disabled = false; });
   });
 
-  // Kick off
-  runAllChecks();
+  // No auto-run on load — checks only fire when the user presses "Check now".
 })();
 </script>
 </body>
