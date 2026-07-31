@@ -11,9 +11,13 @@
 </style>
 </head>
 <body>
-  <iframe
-    src="https://academics.pediaid.bridgr.co.in/?p=academics%2Fadmin"
-    title="PediAid Admin Dashboard"
-  ></iframe>
+  <iframe id="admin-frame" title="PediAid Admin Dashboard"></iframe>
+  <script>
+    // Set src via JS with a fresh cache-busting param on every load, so this
+    // always fetches the live academics build instead of a cached copy of
+    // the iframe document from a previous visit.
+    document.getElementById('admin-frame').src =
+      'https://academics.pediaid.bridgr.co.in/?p=academics%2Fadmin&_cb=' + Date.now();
+  </script>
 </body>
 </html>
