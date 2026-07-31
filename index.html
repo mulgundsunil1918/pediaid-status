@@ -346,9 +346,9 @@
 
   /* ============================ ADMIN TABS ============================ */
   .tab-bar {
-    max-width: 1100px; margin: -40px auto 0; padding: 0 20px;
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.15);
     display: flex; gap: 6px; flex-wrap: wrap;
-    position: relative; z-index: 2;
   }
   .tab-btn {
     background: rgba(255,255,255,0.10);
@@ -514,23 +514,22 @@
       <span class="big-dot"></span>
       <span id="overall-text">Not checked yet — press "Check now" below</span>
     </div>
+    <nav class="tab-bar" id="tab-bar">
+      <button class="tab-btn active" data-tab="status">System Status</button>
+      <button class="tab-btn" data-tab="never-again" data-src="academics%2Fadmin%2Fnever-again%2Fpending">Never Again</button>
+      <button class="tab-btn" data-tab="cme" data-src="academics%2Fadmin%2Fcme">CME Events</button>
+      <button class="tab-btn" data-tab="cme-pending" data-src="academics%2Fadmin%2Fcme%2Fpending">Pending Events</button>
+      <button class="tab-btn" data-tab="notify" data-src="academics%2Fadmin%2Fnotify">Send Notification</button>
+      <button class="tab-btn" data-tab="overview" data-src="academics%2Fadmin">Overview</button>
+      <button class="tab-btn" data-tab="users" data-src="academics%2Fadmin%2Fusers">Users</button>
+      <button class="tab-btn" data-tab="pending-apps" data-src="academics%2Fadmin%2Fpending-applications">Pending Applications</button>
+      <button class="tab-btn" data-tab="credentials" data-src="academics%2Fadmin%2Fcredentials">Credentials</button>
+      <button class="tab-btn" data-tab="content" data-src="academics%2Fadmin%2Fcontent">Content</button>
+      <button class="tab-btn" data-tab="taxonomy" data-src="academics%2Fadmin%2Ftaxonomy">Taxonomy</button>
+      <button class="tab-btn" data-tab="role-requests" data-src="academics%2Fadmin%2Frole-requests">Role Requests</button>
+    </nav>
   </div>
 </header>
-
-<nav class="tab-bar" id="tab-bar">
-  <button class="tab-btn active" data-tab="status">System Status</button>
-  <button class="tab-btn" data-tab="never-again" data-src="academics%2Fadmin%2Fnever-again%2Fpending">Never Again</button>
-  <button class="tab-btn" data-tab="cme" data-src="academics%2Fadmin%2Fcme">CME Events</button>
-  <button class="tab-btn" data-tab="cme-pending" data-src="academics%2Fadmin%2Fcme%2Fpending">Pending Events</button>
-  <button class="tab-btn" data-tab="notify" data-src="academics%2Fadmin%2Fnotify">Send Notification</button>
-  <button class="tab-btn" data-tab="overview" data-src="academics%2Fadmin">Overview</button>
-  <button class="tab-btn" data-tab="users" data-src="academics%2Fadmin%2Fusers">Users</button>
-  <button class="tab-btn" data-tab="pending-apps" data-src="academics%2Fadmin%2Fpending-applications">Pending Applications</button>
-  <button class="tab-btn" data-tab="credentials" data-src="academics%2Fadmin%2Fcredentials">Credentials</button>
-  <button class="tab-btn" data-tab="content" data-src="academics%2Fadmin%2Fcontent">Content</button>
-  <button class="tab-btn" data-tab="taxonomy" data-src="academics%2Fadmin%2Ftaxonomy">Taxonomy</button>
-  <button class="tab-btn" data-tab="role-requests" data-src="academics%2Fadmin%2Frole-requests">Role Requests</button>
-</nav>
 
 <div class="tab-panel active" id="tab-panel-status">
 <main>
