@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>PediAid Admin — Mission Control</title>
+<title>PediAid System Status</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -351,29 +351,19 @@
   .checklist .row-title.done { text-decoration: line-through; color: var(--gray); font-weight: 500; }
 
   /* ============================ ADMIN TABS ============================ */
-  .tab-bar {
-    margin-top: 20px; padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    display: flex; gap: 6px; flex-wrap: wrap;
+  .admin-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    color: #fff; text-decoration: none;
+    font-weight: 700; font-size: 13px;
+    backdrop-filter: blur(4px);
+    transition: background 0.15s ease;
   }
-  .tab-btn {
-    background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.20);
-    color: rgba(255,255,255,0.85);
-    font-family: inherit; font-weight: 700; font-size: 12.5px;
-    padding: 8px 14px; border-radius: 10px 10px 0 0;
-    cursor: pointer; backdrop-filter: blur(4px);
-  }
-  .tab-btn:hover { background: rgba(255,255,255,0.18); }
-  .tab-btn.active { background: var(--bg); color: var(--navy); }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  .tab-frame-wrap { max-width: 1100px; margin: 0 auto; padding: 20px; }
-  .tab-frame-wrap iframe {
-    width: 100%; height: calc(100vh - 160px); min-height: 500px;
-    border: 1px solid var(--border); border-radius: 16px;
-    box-shadow: var(--shadow); background: var(--card);
-  }
+  .admin-link:hover { background: rgba(255,255,255,0.22); }
 
   footer { text-align: center; padding: 30px 16px; color: var(--gray); font-size: 11px; }
 
@@ -396,110 +386,9 @@
     .arch { padding: 18px 12px 22px; }
     .arch-box { min-width: 0; max-width: none; flex: 1 1 100%; }
   }
-  /* ---- Login gate (deterrent only; real lock is the backend admin key) ---- */
-  #gate {
-    position: fixed; inset: 0; z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-    background:
-      radial-gradient(700px 260px at 85% -60px, rgba(96,165,250,0.35), transparent 65%),
-      linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
-  }
-  #gate .gate-card {
-    width: 100%; max-width: 360px;
-    background: var(--card);
-    border-radius: 18px;
-    padding: 26px 24px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-  }
-  #gate .gate-logo {
-    width: 52px; height: 52px; border-radius: 14px;
-    background: linear-gradient(135deg, var(--navy), var(--accent));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px; margin: 0 auto 14px;
-  }
-  #gate h2 { text-align: center; font-size: 18px; margin: 0 0 2px; color: var(--text); }
-  #gate .gate-sub { text-align: center; font-size: 12px; color: var(--gray); margin-bottom: 18px; }
-  #gate label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin: 12px 0 5px; }
-  #gate input[type=text], #gate input[type=password] {
-    width: 100%; font-family: inherit; font-size: 14px; color: var(--text);
-    background: var(--bg); border: 1.5px solid var(--border); border-radius: 11px;
-    padding: 11px 13px; outline: none;
-  }
-  #gate input:focus { border-color: var(--accent); background: #fff; }
-  #gate .gate-remember { display: flex; align-items: center; gap: 7px; margin: 14px 0 4px; font-size: 12.5px; color: var(--text-soft); }
-  #gate button {
-    width: 100%; margin-top: 16px;
-    background: linear-gradient(135deg, var(--navy), var(--navy-dark));
-    color: #fff; border: none; padding: 12px; border-radius: 12px;
-    font-family: inherit; font-weight: 800; font-size: 14px; cursor: pointer;
-  }
-  #gate .gate-err { color: var(--red); font-size: 12.5px; font-weight: 600; margin-top: 10px; min-height: 16px; text-align: center; }
-  #gate .gate-note { font-size: 10.5px; color: var(--gray); text-align: center; margin-top: 14px; line-height: 1.5; }
 </style>
 </head>
 <body>
-
-<!-- Login gate. NOTE: this is a client-side deterrent to keep casual visitors
-     out and is NOT bypass-proof (the page source is public). The real security
-     for the only sensitive action — sending a push notification — is the
-     server-verified admin key checked by the backend. -->
-<div id="gate">
-  <form class="gate-card" id="gate-form" autocomplete="on">
-    <div class="gate-logo">🔒</div>
-    <h2>PediAid Admin</h2>
-    <div class="gate-sub">Sign in to view the dashboard</div>
-    <label for="gate-user">Username</label>
-    <input type="text" id="gate-user" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
-    <label for="gate-pass">Password</label>
-    <input type="password" id="gate-pass" name="password" autocomplete="current-password" required>
-    <label class="gate-remember"><input type="checkbox" id="gate-remember" checked> Remember me on this device</label>
-    <button type="submit">Sign in</button>
-    <div class="gate-err" id="gate-err"></div>
-    <div class="gate-note">Private admin console. Casual-access deterrent only —
-      broadcasts still require the server-side admin key.</div>
-  </form>
-</div>
-
-<script>
-(function () {
-  // Credential check is client-side (GitHub Pages has no server). Only the
-  // SHA-256 hash of the password is stored here, never the plaintext.
-  var AUTH_USER = 'admin';
-  var AUTH_HASH = '5d4e8db6a998c00cf74848bb67b65aa8425ab5a1523b7af0b0b1383aebf8713f'; // temp: "PediAid-Status-2026"
-  var STORE = 'pediaid_status_auth_v1';
-
-  function reveal() {
-    var g = document.getElementById('gate');
-    if (g) g.remove();
-    document.body.style.overflow = '';
-  }
-  async function sha256(s) {
-    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-  }
-
-  // Already signed in on this device?
-  try { if (localStorage.getItem(STORE) === AUTH_HASH) { reveal(); return; } } catch (e) {}
-
-  document.body.style.overflow = 'hidden';
-  document.getElementById('gate-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    var u = document.getElementById('gate-user').value.trim().toLowerCase();
-    var p = document.getElementById('gate-pass').value;
-    var err = document.getElementById('gate-err');
-    var h = await sha256(p);
-    if (u === AUTH_USER && h === AUTH_HASH) {
-      if (document.getElementById('gate-remember').checked) {
-        try { localStorage.setItem(STORE, AUTH_HASH); } catch (e) {}
-      }
-      reveal();
-    } else {
-      err.textContent = 'Wrong username or password.';
-    }
-  });
-})();
-</script>
 
 <header class="hero">
   <div class="hero-inner">
@@ -507,8 +396,8 @@
       <div class="brand">
         <div class="logo">🏥</div>
         <div>
-          <h1>PediAid Admin</h1>
-          <div class="subtitle">Mission control · live health · broadcast center</div>
+          <h1>PediAid System Status</h1>
+          <div class="subtitle">Live health checks · architecture · broadcast center</div>
         </div>
       </div>
       <div class="clock">
@@ -520,26 +409,19 @@
       <span class="big-dot"></span>
       <span id="overall-text">Not checked yet — press "Check now" below</span>
     </div>
-    <nav class="tab-bar" id="tab-bar">
-      <button class="tab-btn active" data-tab="status">System Status</button>
-      <button class="tab-btn" data-tab="never-again" data-src="academics%2Fadmin%2Fnever-again%2Fpending">Never Again</button>
-      <button class="tab-btn" data-tab="cme-conference" data-src="academics%2Fadmin%2Fcme%2Fconference%2Fpending">Conferences</button>
-      <button class="tab-btn" data-tab="cme-webinar" data-src="academics%2Fadmin%2Fcme%2Fwebinar%2Fpending">Webinars</button>
-      <button class="tab-btn" data-tab="cme-workshop" data-src="academics%2Fadmin%2Fcme%2Fworkshop%2Fpending">Workshops</button>
-      <button class="tab-btn" data-tab="cme-course" data-src="academics%2Fadmin%2Fcme%2Fcourse%2Fpending">Courses</button>
-      <button class="tab-btn" data-tab="notify" data-src="academics%2Fadmin%2Fnotify">Send Notification</button>
-      <button class="tab-btn" data-tab="overview" data-src="academics%2Fadmin">Overview</button>
-      <button class="tab-btn" data-tab="users" data-src="academics%2Fadmin%2Fusers">Users</button>
-      <button class="tab-btn" data-tab="pending-apps" data-src="academics%2Fadmin%2Fpending-applications">Pending Applications</button>
-      <button class="tab-btn" data-tab="credentials" data-src="academics%2Fadmin%2Fcredentials">Credentials</button>
-      <button class="tab-btn" data-tab="content" data-src="academics%2Fadmin%2Fcontent">Content</button>
-      <button class="tab-btn" data-tab="taxonomy" data-src="academics%2Fadmin%2Ftaxonomy">Taxonomy</button>
-      <button class="tab-btn" data-tab="role-requests" data-src="academics%2Fadmin%2Frole-requests">Role Requests</button>
-    </nav>
+    <!-- The admin modules used to be embedded here as iframes of
+         academics.pediaid.bridgr.co.in. Browsers treat that as third-party
+         and give it isolated storage, so the sign-in never carried across —
+         every tab demanded a fresh login, and Safari could never work at
+         all. The academics site already hosts the same 15 sections behind
+         one login, so this links there instead of duplicating them. -->
+    <a class="admin-link" href="https://academics.pediaid.bridgr.co.in/academics/admin"
+       target="_blank" rel="noopener noreferrer">
+      Open Admin Dashboard &rarr;
+    </a>
   </div>
 </header>
 
-<div class="tab-panel active" id="tab-panel-status">
 <main>
 
   <!-- ============================ STAT TILES ============================ -->
@@ -796,48 +678,12 @@
 </main>
 </div>
 
-<div class="tab-panel" id="tab-panel-never-again"><div class="tab-frame-wrap"><iframe title="Never Again"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-cme-conference"><div class="tab-frame-wrap"><iframe title="Conferences"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-cme-webinar"><div class="tab-frame-wrap"><iframe title="Webinars"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-cme-workshop"><div class="tab-frame-wrap"><iframe title="Workshops"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-cme-course"><div class="tab-frame-wrap"><iframe title="Courses"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-notify"><div class="tab-frame-wrap"><iframe title="Send Notification"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-overview"><div class="tab-frame-wrap"><iframe title="Overview"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-users"><div class="tab-frame-wrap"><iframe title="Users"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-pending-apps"><div class="tab-frame-wrap"><iframe title="Pending Applications"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-credentials"><div class="tab-frame-wrap"><iframe title="Credentials"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-content"><div class="tab-frame-wrap"><iframe title="Content"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-taxonomy"><div class="tab-frame-wrap"><iframe title="Taxonomy"></iframe></div></div>
-<div class="tab-panel" id="tab-panel-role-requests"><div class="tab-frame-wrap"><iframe title="Role Requests"></iframe></div></div>
 
 <footer>
-  PediAid Admin · static page on GitHub Pages · pings run from your browser · no analytics
+  PediAid System Status · static page on GitHub Pages · pings run from your browser · no analytics
 </footer>
 
-<script>
-(function () {
-  // Tab switching + lazy iframe loading — each admin section only fetches
-  // its iframe the first time its tab is opened, not all 11 at once on load.
-  var tabs = document.querySelectorAll('.tab-btn');
-  var loaded = {};
-  tabs.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var tab = btn.getAttribute('data-tab');
-      tabs.forEach(function (b) { b.classList.toggle('active', b === btn); });
-      document.querySelectorAll('.tab-panel').forEach(function (p) {
-        p.classList.toggle('active', p.id === 'tab-panel-' + tab);
-      });
-      var src = btn.getAttribute('data-src');
-      if (src && !loaded[tab]) {
-        var panel = document.getElementById('tab-panel-' + tab);
-        var iframe = panel.querySelector('iframe');
-        iframe.src = 'https://academics.pediaid.bridgr.co.in/?p=' + src + '&_cb=' + Date.now();
-        loaded[tab] = true;
-      }
-    });
-  });
-})();
-</script>
+
 
 <script>
 (function() {
