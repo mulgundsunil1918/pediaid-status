@@ -98,6 +98,43 @@
   .overall.ok .big-dot   { background: #4ade80; box-shadow: 0 0 0 4px rgba(74,222,128,0.25), 0 0 12px rgba(74,222,128,0.8); }
   .overall.bad .big-dot  { background: #f87171; box-shadow: 0 0 0 4px rgba(248,113,113,0.25), 0 0 12px rgba(248,113,113,0.8); }
 
+
+  /* ============================ QUICK LINKS ============================ */
+  .links-wrap { margin-bottom: 26px; }
+  .links-group { margin-bottom: 18px; }
+  .links-group-head {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--gray); margin-bottom: 9px;
+  }
+  .links-grid {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  }
+  .link-card {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 14px;
+    text-decoration: none; color: inherit;
+    box-shadow: var(--shadow);
+    transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+  }
+  .link-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--accent);
+  }
+  .link-card .lc-icon { font-size: 17px; line-height: 1.2; flex-shrink: 0; }
+  .link-card .lc-name { display: block; font-weight: 700; font-size: 13.5px; color: var(--text); }
+  .link-card .lc-sub  { display: block; font-size: 11.5px; color: var(--gray); margin-top: 2px; line-height: 1.45; }
+  /* The primary entry point — visually louder than the rest. */
+  .link-card.primary {
+    background: var(--navy); border-color: var(--navy);
+  }
+  .link-card.primary .lc-name { color: #fff; }
+  .link-card.primary .lc-sub  { color: rgba(255,255,255,0.72); }
+  .link-card.primary:hover { border-color: var(--accent); }
+
   /* ============================ STAT TILES ============================ */
   main { max-width: 1100px; margin: 0 auto; padding: 0 20px 64px; }
   .stats {
@@ -423,6 +460,124 @@
 </header>
 
 <main>
+
+  <!-- ============================ QUICK LINKS ============================
+       One bookmarkable launcher: every surface, dashboard and repo.
+       ==================================================================== -->
+  <div class="links-wrap">
+    <div class="links-group">
+      <div class="links-group-head"><span>🛠️</span><span>Admin</span></div>
+      <div class="links-grid">
+      <a class="link-card primary" href="https://academics.pediaid.bridgr.co.in/academics/admin" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🎛️</span>
+        <span><span class="lc-name">Admin Dashboard</span><span class="lc-sub">All 15 sections · one login</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/submissions" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">📥</span>
+        <span><span class="lc-name">All Submissions</span><span class="lc-sub">Every module, every status</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/never-again/pending" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">⚠️</span>
+        <span><span class="lc-name">Never Again queue</span><span class="lc-sub">Moderate anonymous posts</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/cme/conference/pending" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🎓</span>
+        <span><span class="lc-name">Conferences</span><span class="lc-sub">Pending CME conferences</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/cme/webinar/pending" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🎥</span>
+        <span><span class="lc-name">Webinars</span><span class="lc-sub">Pending webinars</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/cme/workshop/pending" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🔧</span>
+        <span><span class="lc-name">Workshops</span><span class="lc-sub">Pending workshops</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/cme/course/pending" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">📚</span>
+        <span><span class="lc-name">Courses</span><span class="lc-sub">Pending courses</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in/academics/admin/users" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">👥</span>
+        <span><span class="lc-name">Users</span><span class="lc-sub">Roles and accounts</span></span>
+      </a>
+      </div>
+    </div>
+    <div class="links-group">
+      <div class="links-group-head"><span>🌐</span><span>Live sites</span></div>
+      <div class="links-grid">
+      <a class="link-card" href="https://pediaid.bridgr.co.in" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🏥</span>
+        <span><span class="lc-name">PediAid App</span><span class="lc-sub">pediaid.bridgr.co.in · calculators, charts</span></span>
+      </a>
+      <a class="link-card" href="https://academics.pediaid.bridgr.co.in" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🎓</span>
+        <span><span class="lc-name">PediAid Academics</span><span class="lc-sub">academics.pediaid.bridgr.co.in · chapters, CME</span></span>
+      </a>
+      <a class="link-card" href="https://info.pediaid.bridgr.co.in" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🔎</span>
+        <span><span class="lc-name">Tools &amp; Resources</span><span class="lc-sub">info.pediaid.bridgr.co.in · public SEO pages</span></span>
+      </a>
+      </div>
+    </div>
+    <div class="links-group">
+      <div class="links-group-head"><span>☁️</span><span>Services</span></div>
+      <div class="links-grid">
+      <a class="link-card" href="https://dashboard.render.com" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🚀</span>
+        <span><span class="lc-name">Render</span><span class="lc-sub">Backend hosting and env vars</span></span>
+      </a>
+      <a class="link-card" href="https://resend.com/emails" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">📧</span>
+        <span><span class="lc-name">Resend</span><span class="lc-sub">Email delivery log</span></span>
+      </a>
+      <a class="link-card" href="https://console.firebase.google.com/project/pediaid-app" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🔥</span>
+        <span><span class="lc-name">Firebase</span><span class="lc-sub">Auth and push</span></span>
+      </a>
+      <a class="link-card" href="https://console.neon.tech" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🐘</span>
+        <span><span class="lc-name">Neon</span><span class="lc-sub">PostgreSQL database</span></span>
+      </a>
+      <a class="link-card" href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🔍</span>
+        <span><span class="lc-name">Search Console</span><span class="lc-sub">Google indexing</span></span>
+      </a>
+      <a class="link-card" href="https://play.google.com/console" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🤖</span>
+        <span><span class="lc-name">Play Console</span><span class="lc-sub">Android releases</span></span>
+      </a>
+      <a class="link-card" href="https://appstoreconnect.apple.com" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">🍎</span>
+        <span><span class="lc-name">App Store Connect</span><span class="lc-sub">iOS releases</span></span>
+      </a>
+      </div>
+    </div>
+    <div class="links-group">
+      <div class="links-group-head"><span>💻</span><span>Code</span></div>
+      <div class="links-grid">
+      <a class="link-card" href="https://github.com/mulgundsunil1918/pediaid-backend" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">⚙️</span>
+        <span><span class="lc-name">pediaid-backend</span><span class="lc-sub">Fastify + TypeScript API</span></span>
+      </a>
+      <a class="link-card" href="https://github.com/mulgundsunil1918/pediaid-frontend" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">⚛️</span>
+        <span><span class="lc-name">pediaid-frontend</span><span class="lc-sub">Academics + admin (React)</span></span>
+      </a>
+      <a class="link-card" href="https://github.com/mulgundsunil1918/pediaid-flutter" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">📱</span>
+        <span><span class="lc-name">pediaid-flutter</span><span class="lc-sub">The mobile / web app</span></span>
+      </a>
+      <a class="link-card" href="https://github.com/mulgundsunil1918/pediaid-landing" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">📄</span>
+        <span><span class="lc-name">pediaid-landing</span><span class="lc-sub">SEO pages</span></span>
+      </a>
+      <a class="link-card" href="https://github.com/mulgundsunil1918/pediaid-status" target="_blank" rel="noopener noreferrer">
+        <span class="lc-icon">📊</span>
+        <span><span class="lc-name">pediaid-status</span><span class="lc-sub">This page</span></span>
+      </a>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================ STAT TILES ============================ -->
   <div class="stats">
