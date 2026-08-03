@@ -461,6 +461,35 @@
 
 <main>
 
+  <!-- ============================ STAT TILES ============================ -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Services online</div>
+      <div class="stat-value" id="stat-online">—</div>
+      <div class="stat-sub">of <span id="stat-total">4</span> live checks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Fastest response</div>
+      <div class="stat-value" id="stat-fast">— <span class="unit">ms</span></div>
+      <div class="stat-sub" id="stat-fast-name">&nbsp;</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Slowest response</div>
+      <div class="stat-value" id="stat-slow">— <span class="unit">ms</span></div>
+      <div class="stat-sub" id="stat-slow-name">&nbsp;</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Last checked</div>
+      <div class="stat-value" style="font-size:18px;" id="last-updated">Not yet run</div>
+      <div class="stat-sub">nothing runs automatically</div>
+    </div>
+  </div>
+
+  <div class="refresh-bar">
+    <div>Checks only run from <strong>your browser</strong> when you press the button — no auto-polling, no server, no analytics.</div>
+    <button id="refresh-btn" type="button">Check now</button>
+  </div>
+
   <!-- ============================ QUICK LINKS ============================
        One bookmarkable launcher: every surface, dashboard and repo.
        ==================================================================== -->
@@ -577,35 +606,6 @@
       </a>
       </div>
     </div>
-  </div>
-
-  <!-- ============================ STAT TILES ============================ -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-label">Services online</div>
-      <div class="stat-value" id="stat-online">—</div>
-      <div class="stat-sub">of <span id="stat-total">4</span> live checks</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Fastest response</div>
-      <div class="stat-value" id="stat-fast">— <span class="unit">ms</span></div>
-      <div class="stat-sub" id="stat-fast-name">&nbsp;</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Slowest response</div>
-      <div class="stat-value" id="stat-slow">— <span class="unit">ms</span></div>
-      <div class="stat-sub" id="stat-slow-name">&nbsp;</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Last checked</div>
-      <div class="stat-value" style="font-size:18px;" id="last-updated">Not yet run</div>
-      <div class="stat-sub">nothing runs automatically</div>
-    </div>
-  </div>
-
-  <div class="refresh-bar">
-    <div>Checks only run from <strong>your browser</strong> when you press the button — no auto-polling, no server, no analytics.</div>
-    <button id="refresh-btn" type="button">Check now</button>
   </div>
 
   <!-- ============================ KNOWN ISSUES ============================ -->
